@@ -11,4 +11,6 @@
 |
 */
 
+Route::resource('users', 'UsersController');
 Route::resource('collections', 'CollectionsController');
+Route::resource('itesm', 'ItemsController');
