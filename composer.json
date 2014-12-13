@@ -5,7 +5,9 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"laravel/framework": "4.2.*"
+		"laravel/framework": "4.2.*",
+		"lucadegasperi/oauth2-server-laravel": "3.*",
+        "esensi/model": "0.3.*"
 	},
 	"autoload": {
 		"classmap": [

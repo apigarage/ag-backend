@@ -10,7 +10,7 @@ class CollectionsController extends \BaseController {
      */
     public function index()
     {
-        return Collection::all()->toJSON();
+        return Response::json(Collection::all());
     }
 
 

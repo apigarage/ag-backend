@@ -3,6 +3,15 @@
 
 class UsersController extends \BaseController {
 
+    private function has_access($resource_id){
+        if( $this->current_resource_owner ){
+            if( $this->current_resource_owner->id == $resource_id ){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -22,9 +31,6 @@ class UsersController extends \BaseController {
     public function store()
     {
         $input = Input::all();
-        $password = $input['password'];
-        $password = $password . 3; // TODO - PLEASE APPLY SOME HASHING HERE, WHEN YOU HAVE INTERNER
-        $input['password'] = $password;
         $user = User::create($input);
         return Response::json( $user, 201 );
     }
@@ -38,7 +44,8 @@ class UsersController extends \BaseController {
      */
     public function show($id)
     {
-        // TODO - Allow only if $id is the same one as the logged in user.
+        if( ! $this->has_access($id) ) return Response::json([], 401);
+
         $user = User::find($id);
         if( empty($user) ) return Response::json([], 404);
 
@@ -53,7 +60,8 @@ class UsersController extends \BaseController {
      */
     public function update($id)
     {
-        // TODO - Allow only if $id is the same one as the logged in user.        
+        if( ! $this->has_access($id) ) return Response::json([], 401);
+
         $user = User::find($id);
         if( empty($user) ) return Response::json([], 404);
 
