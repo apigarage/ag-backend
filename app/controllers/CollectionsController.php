@@ -3,6 +3,30 @@
 
 class CollectionsController extends \BaseController {
 
+    /*
+     * @resouce_id: collection_id
+     * @acceess_type: 'read','write','delete'
+     * TODO: Implement access_type properly.
+     * TODO: This function should be either part of global model or the collection model.
+     */
+    private function has_access($resource_id, $access_type='read'){
+        if( $this->current_resource_owner ){
+
+            $user_collection = UserCollection::where('collection_id','=',$resource_id)
+                          ->where('user_id', '=', $this->current_resource_owner->id)
+                          ->first();
+
+            // If user is a resource member
+            if( $user_collection ){
+                // If delete permission are required and the member has the permissions
+                if( $access_type == 'delete' && $user_collection->permission_id != 1 ) return false;
+                // if simple read permissions are required.
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -10,9 +34,9 @@ class CollectionsController extends \BaseController {
      */
     public function index()
     {
-        return Response::json(Collection::all());
+        $collections = $this->current_resource_owner->collections()->get();
+        return Response::json( $collections );
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -23,9 +47,9 @@ class CollectionsController extends \BaseController {
     {
         $input = Input::all();
         $collection = Collection::create($input);
+        $user_collection = $collection->addMember( $this->current_resource_owner->id );
         return Response::json( $collection, 201 );
     }
-
 
     /**
      * Display the specified resource.
@@ -35,6 +59,8 @@ class CollectionsController extends \BaseController {
      */
     public function show($id)
     {
+        if( ! $this->has_access( $id ) ) return Response::json([], 401);
+
         $collection = Collection::find($id);
         if( empty($collection) ) return Response::json([], 404);
 
@@ -49,14 +75,23 @@ class CollectionsController extends \BaseController {
      */
     public function update($id)
     {
+        if( ! $this->has_access( $id ) ) return Response::json([], 401);
+
         $collection = Collection::find($id);
         if( empty($collection) ) return Response::json([], 404);
 
-        $input = Input::all();
-        $collection->update($input);
+        if( !empty( Input::get('user_id') ) ){
+            $user_collection = $collection->addMember( Input::get('user_id') );
+        } 
+        else
+        {
+            $input = Input::all();
+            if( empty( $input ) ) return Response::json([], 400);
+            $collection->update($input);
+        }
+
         return Response::json($collection->toJSON(), 200);
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -66,10 +101,11 @@ class CollectionsController extends \BaseController {
      */
     public function destroy($id)
     {
-        $collection = Collection::find($id);
-        if( empty($collection) ) return Response::json([], 404);
+        if( ! $this->has_access($id, 'delete') ) return Response::json([], 401);
 
-        $collection->delete();
+        UserCollection::where('collection_id', '=', $id)->delete();
+        Collection::find($id)->delete();
+
         return Response::json([], 204);
     }
 
