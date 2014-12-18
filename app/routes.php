@@ -20,11 +20,7 @@ Route::post('oauth/token', function() {
  */
 Route::group(array('prefix' => 'api'), function()
 {
-    Route::resource('users', 'UserController', 
-                array('only' => array('store')));
-
-    Route::get('users/check_email_availibility', 'UserController@check_email_availibility');
-    Route::get('employers/all', 'EmployerController@index');
+    Route::resource('users', 'UsersController', ['only'=>['store']]);
 });
 
 /**

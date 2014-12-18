@@ -4,13 +4,13 @@ class BaseController extends Controller {
 
 
     protected $current_resource_owner = NULL;
+    // public function __construct(){
+    //     $resource_owner_id = Authorizer::getResourceOwnerId();
+    //     if( $resource_owner_id ){
+    //         $this->current_resource_owner = User::find($resource_owner_id);
+    //     }
+    // }
 
-    public function __construct(){
-        $resource_owner_id = Authorizer::getResourceOwnerId();
-        if( $resource_owner_id ){
-            $this->current_resource_owner = User::find($resource_owner_id);
-        }
-    }
 
     /**
      * Setup the layout used by the controller.

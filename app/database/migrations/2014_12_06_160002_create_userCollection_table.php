@@ -21,6 +21,8 @@ class CreateUserCollectionTable extends Migration {
             $table->integer('permission_id'); 
                 // If 1 --> User can edit. 
                 // Later on permission_id can be used to store permission ids.
+
+            $table->primary(array('user_id', 'collection_id'));
             $table->softDeletes();
         });
     }

@@ -10,10 +10,12 @@ class CollectionsController extends \BaseController {
      * TODO: This function should be either part of global model or the collection model.
      */
     private function has_access($resource_id, $access_type='read'){
-        if( $this->current_resource_owner ){
+        $current_resource_owner = Authorizer::getResourceOwnerId();
+
+        if( $current_resource_owner ){
 
             $user_collection = UserCollection::where('collection_id','=',$resource_id)
-                          ->where('user_id', '=', $this->current_resource_owner->id)
+                          ->where('user_id', '=', $current_resource_owner)
                           ->first();
 
             // If user is a resource member
@@ -34,7 +36,11 @@ class CollectionsController extends \BaseController {
      */
     public function index()
     {
-        $collections = $this->current_resource_owner->collections()->get();
+        $collections = null;
+        $user_id = Authorizer::getResourceOwnerId();
+        if( $user_id ){
+            $collections = User::find( $user_id )->collections()->get();
+        }
         return Response::json( $collections );
     }
 
@@ -47,7 +53,7 @@ class CollectionsController extends \BaseController {
     {
         $input = Input::all();
         $collection = Collection::create($input);
-        $user_collection = $collection->addMember( $this->current_resource_owner->id );
+        $user_collection = $collection->addMember( Authorizer::getResourceOwnerId() );
         return Response::json( $collection, 201 );
     }
 

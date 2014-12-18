@@ -4,12 +4,12 @@
 class UsersController extends \BaseController {
 
     private function has_access($resource_id){
-        if( $this->current_resource_owner ){
-            if( $this->current_resource_owner->id == $resource_id ){
-                return true;
-            }
+        $current_resource_owner = Authorizer::getResourceOwnerId();
+        if( $current_resource_owner == $resource_id ){
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
     /**

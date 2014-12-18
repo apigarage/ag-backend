@@ -16,6 +16,7 @@ class CreateItemTable extends Migration {
         {
             $table->timestamps();
             $table->increments('id');
+            $table->string('uuid', 50)->unique()->index();
             $table->integer('author_id');
             $table->integer('collection_id');
             $table->string('name');

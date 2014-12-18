@@ -8,10 +8,10 @@ class ItemsController extends \BaseController {
      *
      * @return Response
      */
-    public function index()
-    {
-        return Item::all()->toJSON();
-    }
+    // public function index()
+    // {
+    //     return Item::all()->toJSON();
+    // }
 
 
     /**
@@ -22,6 +22,7 @@ class ItemsController extends \BaseController {
     public function store()
     {
         $input = Input::all();
+        $input['author_id'] = Authorizer::getResourceOwnerId();
         $item = Item::create($input);
         return Response::json( $item, 201 );
     }
@@ -30,12 +31,12 @@ class ItemsController extends \BaseController {
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $uuid
      * @return Response
      */
-    public function show($id)
+    public function show($uuid)
     {
-        $item = Item::find($id);
+        $item = Item::where('uuid', $uuid)->first();
         if( empty($item) ) return Response::json([], 404);
 
         return Response::json($item->toJSON(), 200);
@@ -47,9 +48,9 @@ class ItemsController extends \BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function update($id)
+    public function update($uuid)
     {
-        $item = Item::find($id);
+        $item = Item::where('uuid', $uuid)->first();
         if( empty($item) ) return Response::json([], 404);
 
         $input = Input::all();
@@ -64,9 +65,9 @@ class ItemsController extends \BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($uuid)
     {
-        $item = Item::find($id);
+        $item = Item::where('uuid', $uuid)->first();
         if( empty($item) ) return Response::json([], 404);
 
         $item->delete();
