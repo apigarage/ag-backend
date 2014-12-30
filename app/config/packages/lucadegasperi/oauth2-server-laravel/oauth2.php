@@ -78,7 +78,7 @@ return [
 
         'password' => [
             'class'            => 'League\OAuth2\Server\Grant\PasswordGrant',
-            'access_token_ttl' => 604800,
+            'access_token_ttl' => 7776000, // 3600 * 24 * 90 ( 90 days )
 
             // the code to run in order to verify the user's identity
             'callback'         => function($username, $password){

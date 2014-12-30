@@ -40,6 +40,9 @@ class CollectionsController extends \BaseController {
         $user_id = Authorizer::getResourceOwnerId();
         if( $user_id ){
             $collections = User::find( $user_id )->collections()->get();
+            foreach ($collections as $collection) {
+                $collection->items = $collection->items()->get();
+            }
         }
         return Response::json( $collections );
     }

@@ -17,4 +17,8 @@ class Collection extends Model {
         return $user_collection;
     }
 
+    public function items(){
+        return $this->hasMany('Item');
+    }
+
 }
