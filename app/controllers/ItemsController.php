@@ -23,6 +23,9 @@ class ItemsController extends \BaseController {
     {
         $input = Input::all();
         $input['author_id'] = Authorizer::getResourceOwnerId();
+        if( !empty( Input::get('headers') ) ){
+            $input['headers'] = json_encode( Input::get('headers') );
+        }         
         $item = Item::create($input);
         return Response::json( $item, 201 );
     }
@@ -54,6 +57,9 @@ class ItemsController extends \BaseController {
         if( empty($item) ) return Response::json([], 404);
 
         $input = Input::all();
+        if( !empty( Input::get('headers') ) ){
+            $input['headers'] = json_encode( Input::get('headers') );
+        }         
         $item->update($input);
         return Response::json($item->toJSON(), 200);
     }

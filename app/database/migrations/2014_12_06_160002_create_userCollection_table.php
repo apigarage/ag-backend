@@ -18,7 +18,7 @@ class CreateUserCollectionTable extends Migration {
             $table->increments('id');
             $table->integer('collection_id');
             $table->integer('user_id');
-            $table->integer('permission_id'); 
+            $table->integer('permission_id')->default(1); 
                 // If 1 --> User can edit. 
                 // Later on permission_id can be used to store permission ids.
 

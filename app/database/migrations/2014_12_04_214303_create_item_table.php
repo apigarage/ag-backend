@@ -18,13 +18,13 @@ class CreateItemTable extends Migration {
             $table->increments('id');
             $table->string('uuid', 50)->unique()->index();
             $table->integer('author_id');
-            $table->integer('collection_id');
+            $table->integer('collection_id')->nullable();
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
             $table->string('url');
             $table->string('method');
-            $table->string('header');
-            $table->string('data');
+            $table->string('headers')->nullable();
+            $table->string('data')->nullable();
             $table->softDeletes();
         });
     }

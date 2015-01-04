@@ -89,9 +89,15 @@ class CollectionsController extends \BaseController {
         $collection = Collection::find($id);
         if( empty($collection) ) return Response::json([], 404);
 
-        if( !empty( Input::get('user_id') ) ){
-            $user_collection = $collection->addMember( Input::get('user_id') );
-        } 
+        if( !empty( Input::get('email') ) )
+        {
+            $email = Input::get('email');
+            $user = User::where('email','=',$email)->first();
+            if( empty( $user ) ){
+                return Response::json(['message'=>'user not found'], 404);    
+            }
+            $user_collection = $collection->addMember( $user->id );
+        }
         else
         {
             $input = Input::all();
