@@ -60,10 +60,10 @@ return array(
 
 		'pgsql' => array(
 			'driver'   => 'pgsql',
-			'host'     => 'localhost',
-			'database' => 'forge',
-			'username' => 'forge',
-			'password' => '',
+			'host'      => $_ENV['db_host'],
+			'database'  => $_ENV['db_name'],
+			'username'  => $_ENV['db_username'],
+			'password'  => $_ENV['db_password'],
 			'charset'  => 'utf8',
 			'prefix'   => '',
 			'schema'   => 'public',
