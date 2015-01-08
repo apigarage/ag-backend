@@ -73,7 +73,7 @@ class CollectionsController extends \BaseController {
         $collection = Collection::find($id);
         if( empty($collection) ) return Response::json([], 404);
 
-        return Response::json($collection->toJSON(), 200);
+        return Response::json($collection, 200);
     }
 
     /**
@@ -105,7 +105,7 @@ class CollectionsController extends \BaseController {
             $collection->update($input);
         }
 
-        return Response::json($collection->toJSON(), 200);
+        return Response::json($collection, 200);
     }
 
     /**

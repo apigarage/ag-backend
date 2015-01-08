@@ -27,7 +27,7 @@ class ItemsController extends \BaseController {
             $input['headers'] = json_encode( Input::get('headers') );
         }         
         $item = Item::create($input);
-        return Response::json( $item, 201 );
+        return Response::json($item, 201);
     }
 
 
@@ -42,7 +42,7 @@ class ItemsController extends \BaseController {
         $item = Item::where('uuid', $uuid)->first();
         if( empty($item) ) return Response::json([], 404);
 
-        return Response::json($item->toJSON(), 200);
+        return Response::json($item, 200);
     }
 
     /**
@@ -61,7 +61,7 @@ class ItemsController extends \BaseController {
             $input['headers'] = json_encode( Input::get('headers') );
         }         
         $item->update($input);
-        return Response::json($item->toJSON(), 200);
+        return Response::json($item, 200);
     }
 
 
