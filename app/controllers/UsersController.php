@@ -49,7 +49,7 @@ class UsersController extends \BaseController {
         $user = User::find($id);
         if( empty($user) ) return Response::json([], 404);
 
-        return Response::json($user->toJSON(), 200);
+        return Response::json($user, 200);
     }
 
     /**
@@ -67,9 +67,8 @@ class UsersController extends \BaseController {
 
         $input = Input::all();
         $user->update($input);
-        return Response::json($user->toJSON(), 200);
+        return Response::json($user, 200);
     }
-
 
     /**
      * Remove the specified resource from storage.
