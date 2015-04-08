@@ -3,25 +3,23 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration {
+class CreateCollectionsTable extends Migration {
 
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('users', function(Blueprint $table)
+	/**
+	 * Run the migrations.
+	 *
+	 * @return void
+	 */
+	public function up()
+	{
+        Schema::create('collections', function(Blueprint $table)
         {
             $table->timestamps();
             $table->increments('id');
+            $table->integer('project_id');
             $table->string('name')->nullable();
-            $table->string('email')->unique();
-            $table->string('password', 60);
-            $table->rememberToken();
+            $table->text('description')->nullable();
             $table->softDeletes();
-
         });
     }
 
@@ -32,7 +30,6 @@ class CreateUsersTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('users');
+        Schema::drop('collections');
     }
-
 }

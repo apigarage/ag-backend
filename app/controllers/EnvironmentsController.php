@@ -1,7 +1,7 @@
 <?php
 
 
-class CollectionsController extends \BaseController {
+class EnvironmentsController extends \BaseController {
 
     /*
      * @resouce_id: project_id
@@ -14,7 +14,7 @@ class CollectionsController extends \BaseController {
 
         if( $current_resource_owner ){
 
-            $resource = Collection::find($resource_id);
+            $resource = Environment::find($resource_id);
 
             $user_project = UserProject::where('project_id','=',$resource->project_id)
                           ->where('user_id', '=', $current_resource_owner)
@@ -48,8 +48,8 @@ class CollectionsController extends \BaseController {
     public function store()
     {
         $input = Input::all();
-        $collection = Collection::create($input);
-        return Response::json( $collection, 201 );
+        $environment = Environment::create($input);
+        return Response::json( $environment, 201 );
     }
 
     /**
@@ -62,10 +62,10 @@ class CollectionsController extends \BaseController {
     {
         if( ! $this->has_access($id) ) return Response::json([], 401);
 
-        $collection = Collection::find($id);
-        if( empty($collection) ) return Response::json([], 404);
+        $environment = Environment::find($id);
+        if( empty($environment) ) return Response::json([], 404);
 
-        return Response::json($collection, 200);
+        return Response::json($environment, 200);
     }
 
     /**
@@ -78,14 +78,13 @@ class CollectionsController extends \BaseController {
     {
         if( ! $this->has_access( $id ) ) return Response::json([], 401);
 
-        $collection = Collection::find($id);
-        if( empty($collection) ) return Response::json([], 404);
+        $environment = Environment::find($id);
 
 	    $input = Input::all();
 	    if( empty( $input ) ) return Response::json([], 400);
-	    $collection->update($input);
+	    $environment->update($input);
 
-        return Response::json($collection, 200);
+        return Response::json($environment, 200);
     }
 
     /**
@@ -97,8 +96,8 @@ class CollectionsController extends \BaseController {
     public function destroy($id)
     {
         if( ! $this->has_access($id, 'delete')) return Response::json([], 401);
-        $collection = Collection::find($id);
-        if($collection) $collection->delete();
+        $environment = Environment::find($id);
+        if($environment) $environment->delete();
         return Response::json([], 204);
     }
 

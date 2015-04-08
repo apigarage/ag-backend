@@ -4,7 +4,7 @@
 class Item extends Eloquent {
 
     protected $fillable = ['author_id', 'uuid', 'collection_id','name','description','url','method','headers','data'];
-    protected $table = 'item';
+    protected $table = 'items';
 
     public function getHeaderAttribute($value)
     {

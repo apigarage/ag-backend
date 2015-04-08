@@ -12,19 +12,20 @@ class CreateItemTable extends Migration {
 	 */
 	public function up()
 	{
-        Schema::create('item', function(Blueprint $table)
+        Schema::create('items', function(Blueprint $table)
         {
             $table->timestamps();
             $table->increments('id');
             $table->string('uuid', 50)->unique()->index();
             $table->integer('author_id');
             $table->integer('collection_id')->nullable();
+            $table->integer('project_id')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->string('url');
-            $table->string('method');
-            $table->string('headers')->nullable();
-            $table->string('data')->nullable();
+            $table->text('url');
+            $table->text('method');
+            $table->text('headers')->nullable();
+            $table->text('data')->nullable();
             $table->softDeletes();
         });
     }
@@ -36,7 +37,7 @@ class CreateItemTable extends Migration {
      */
     public function down()
     {
-        Schema::drop('item');
+        Schema::drop('items');
     }
 
 

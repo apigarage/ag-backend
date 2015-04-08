@@ -16,12 +16,12 @@ class User extends Model implements UserInterface, RemindableInterface {
      *
      * @var string
      */
-    protected $table = 'user';
+    protected $table = 'users';
     protected $fillable = ['name','email','password'];
     protected $hidden = array('password', 'remember_token');
     protected $hashable = [ 'password' ];
 
-    public function collections(){
-        return $this->belongsToMany('Collection','user_collection','user_id','collection_id');
+    public function projects(){
+        return $this->belongsToMany('Project','user_project','user_id','project_id');
     }
 }
