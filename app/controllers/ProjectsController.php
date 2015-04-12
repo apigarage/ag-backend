@@ -36,15 +36,10 @@ class ProjectsController extends \BaseController {
      */
     public function index()
     {
-        $project = null;
+        $projects = null;
         $user_id = Authorizer::getResourceOwnerId();
         if( $user_id ){
-            $projects = User::find( $user_id )->project()->get();
-            foreach ($projects as $project) {
-
-                // TODO = FIX-ME FIX-ME
-                // $collection->items = $collection->items()->get();
-            }
+            $projects = User::find( $user_id )->projects()->get();
         }
         return Response::json( $projects );
     }
