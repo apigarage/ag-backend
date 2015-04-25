@@ -90,7 +90,7 @@ class ProjectsController extends \BaseController {
             $email = Input::get('email');
             $user = User::where('email','=',$email)->first();
             if( empty( $user ) ){
-                return Response::json(['message'=>'user not found'], 404);    
+                return Response::json(['message'=>'user not found'], 404);
             }
             $user_project = $project->addMember( $user->id );
         }
@@ -119,6 +119,4 @@ class ProjectsController extends \BaseController {
 
         return Response::json([], 204);
     }
-
-
 }
