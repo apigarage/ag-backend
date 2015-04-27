@@ -41,7 +41,7 @@ class EnvironmentVarsController extends \BaseController {
     {
         if( ! $this->has_access($environment_id) ) return Response::json([], 401);
 
-        $vars = EnvironmentVar::where('environment_id','=',$environment_id)->get();
+        $vars = EnvironmentVar::where('environment_id','=',$environment_id)->orderBy('environment_id')->get();
         if( empty($vars) ) return Response::json([], 404);
 
         return Response::json($vars, 200);

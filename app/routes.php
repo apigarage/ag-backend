@@ -26,7 +26,7 @@ Route::group(array('prefix' => 'api','before' => 'oauth'), function()
     Route::resource('users', 'UsersController', ['only'=>['show','update']]);
     Route::resource('projects', 'ProjectsController');
     Route::resource('collections', 'CollectionsController');
-    Route::resource('environments', 'EnvironmentsController');
+    Route::resource('projects.environments', 'EnvironmentsController');
     Route::resource('environments.vars', 'EnvironmentVarsController');
     Route::resource('items', 'ItemsController');
 

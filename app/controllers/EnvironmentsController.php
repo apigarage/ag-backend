@@ -32,6 +32,22 @@ class EnvironmentsController extends \BaseController {
     }
 
     /**
+     * Display the specified resource.
+     *
+     * @param  int  $project_id
+     * @return Response
+     */
+    public function index($project_id)
+    {
+        if( ! $this->has_access($project_id) ) return Response::json([], 401);
+
+        $vars = Environment::where('project_id','=',$project_id)->get();
+        if( empty($vars) ) return Response::json([], 404);
+
+        return Response::json($vars, 200);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return Response
@@ -45,9 +61,10 @@ class EnvironmentsController extends \BaseController {
      *
      * @return Response
      */
-    public function store()
+    public function store($project_id)
     {
         $input = Input::all();
+        $input["project_id"] = $project_id;
         $environment = Environment::create($input);
         return Response::json( $environment, 201 );
     }
