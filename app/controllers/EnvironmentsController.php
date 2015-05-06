@@ -75,7 +75,7 @@ class EnvironmentsController extends \BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function show($id)
+    public function show($project_id, $id)
     {
         if( ! $this->has_access($id) ) return Response::json([], 401);
 
@@ -91,7 +91,7 @@ class EnvironmentsController extends \BaseController {
      * @param  int  $id
      * @return Response
      */
-    public function update($id)
+    public function update($project_id, $id)
     {
         if( ! $this->has_access( $id ) ) return Response::json([], 401);
 
