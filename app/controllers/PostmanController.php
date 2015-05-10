@@ -64,12 +64,33 @@ class PostmanController extends \BaseController {
                 $request->headers = json_encode($headers);
             }
 
-            // SET DATA
-            $request->data = ''; // TODO - Grab the data (with correct type)
+            // TODO - SET DATA
+            $request->data = null;
+            switch ($postman_request->dataMode) {
+                case 'param':
+                    
+                    break;
+
+                case 'raw':
+
+                    break;
+
+                case 'urlencoded':
+
+                    break;
+
+                default:
+                    $request->data = null
+                    break;
+            }
+
+            // x.requests.forEach(function(item){ console.log( item.name + ' --- ' + item.method + ' --- ' + item.dataMode + '---->' + JSON.stringify(item.data)) });
+            // UPDATE URL, if method is GET and $request->data is not null
             $request->save();
         }
 
-        // TODO - Associate project with the user. (user_project table)
+        // Uncomment this code.
+        // $project->addMember($user_id);
 
     }
 
