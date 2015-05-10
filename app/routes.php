@@ -4,6 +4,10 @@ Route::post('oauth/token', function() {
     return Response::json(Authorizer::issueAccessToken());
 });
 
+Route::get('/', function() {
+    return "API Documentation will go here... ";
+});
+
 /**
  * Publicly Avaialable Routes.
  * TODO - Please lock this with client-id and secret. 
