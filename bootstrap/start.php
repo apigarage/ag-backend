@@ -26,13 +26,11 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(function()
 {
-	if ( ! empty( $_SERVER['MY_LARAVEL_ENV'] ) ){
-		if( $_SERVER['MY_LARAVEL_ENV'] == 'production' )
-		{
-			return 'production';
-		}
-	}
-	return 'local';
+    $hostname = gethostname();
+    if ( !empty($hostname) && ( $hostname == 'production' || $hostname == 'staging' ) ){
+        return $hostname;
+    }
+    else return 'local';
 });
 /*
 |--------------------------------------------------------------------------
