@@ -41,7 +41,7 @@ class PostmanController extends \BaseController {
 
             foreach($postman_data->requests as $postman_request){
                 $request = new Item;
-                $request->uuid = $postman_request->id;
+                $request->uuid = uniqid();
                 $request->author_id = $user_id;
 
                 if( !empty($postman_request->folder) && !empty($collections[$postman_request->folder]) ){
@@ -75,20 +75,14 @@ class PostmanController extends \BaseController {
                 switch ($postman_request->dataMode) {
                     case 'params':
                         //if method is get 
-                        $data_count = count($postman_request->data);
-                        if(strcasecmp($postman_request->method, 'GET') == 0){
-                            $params_string = '?';
-                            for($i = 0 ; $i < $data_count; $i++){
-                                $params_string .= '&' . $postman_request->data[$i]->key . '=' . $postman_request->data[$i]->value;
-                            }
-                            $request->url .= $params_string;
-                        } else {
-                            $params_string = '?';
-                            for($i = 0 ; $i < $data_count; $i++){
-                                $params_string .= '&' . $postman_request->data[$i]->key . '=' . $postman_request->data[$i]->value;
-                            }
-                            $request->data = $params_string;
-                        } 
+                        $params_string = http_build_query($postman_request->data, '?');
+                        if(strlen($params_string) > 0 ){
+                            if(strcasecmp($postman_request->method, 'GET') == 0){
+                                $request->url .= $params_string;
+                            } else {
+                                $request->data = $params_string;
+                            } 
+                        }
                         break;
 
                     case 'raw':
@@ -97,19 +91,13 @@ class PostmanController extends \BaseController {
 
                     case 'urlencoded':
                         //if method is get 
-                        $data_count = count($postman_request->data);
-                        if(strcasecmp($postman_request->method, 'GET') == 0){
-                            $params_string = '?';
-                            for($i = 0 ; $i < $data_count; $i++){
-                                $params_string .= '&' . $postman_request->data[$i]->key . '=' . $postman_request->data[$i]->value;
-                            }
-                            $request->url .= $params_string;
-                        } else {
-                            $params_string = '?';
-                            for($i = 0 ; $i < $data_count; $i++){
-                                $params_string .= '&' . $postman_request->data[$i]->key . '=' . $postman_request->data[$i]->value;
-                            }
-                            $request->data = $params_string;
+                        $params_string = '?' . http_build_query ($postman_request->data);
+                        if(strlen($params_string) > 0 ){
+                            if(strcasecmp($postman_request->method, 'GET') == 0){
+                                $request->url .= $params_string;
+                            } else {
+                                $request->data = $params_string;
+                            } 
                         }
                         break;
 
