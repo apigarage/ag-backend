@@ -61,7 +61,8 @@ class PostmanController extends \BaseController {
                 // SET HEADERS
                 if( !empty($postman_request->headers) ){
                     $headers = [];
-                    foreach (explode('\n', $postman_request->headers) as $header) {
+                    foreach( explode("\n", $postman_request->headers) as $header) {
+                        if(empty($header)) continue;
                         $header_split = explode(':', $header);
                         $key = trim($header_split[0]);
                         $value = trim($header_split[1]);
