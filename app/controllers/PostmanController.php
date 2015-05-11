@@ -70,7 +70,6 @@ class PostmanController extends \BaseController {
                     $request->headers = json_encode($headers);
                 }
 
-                // TODO - SET DATA
                 $request->data = null;
                 switch ($postman_request->dataMode) {
                     case 'params':
@@ -107,12 +106,10 @@ class PostmanController extends \BaseController {
                 }
 
                 // x.requests.forEach(function(item){ console.log( item.name + ' --- ' + item.method + ' --- ' + item.dataMode + '---->' + JSON.stringify(item.data)) });
-                // UPDATE URL, if method is GET and $request->data is not null
                 $request->save();
             }
 
-            // Uncomment this code.
-            // $project->addMember($user_id);
+            $project->addMember($user_id);
         }
 
     }
