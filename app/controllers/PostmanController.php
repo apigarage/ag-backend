@@ -73,7 +73,7 @@ class PostmanController extends \BaseController {
                 // TODO - SET DATA
                 $request->data = null;
                 switch ($postman_request->dataMode) {
-                    case 'param':
+                    case 'params':
                         //if method is get 
                         $data_count = count($postman_request->data);
                         if(strcasecmp($postman_request->method, 'GET') == 0){
