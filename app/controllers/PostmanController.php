@@ -36,6 +36,7 @@ class PostmanController extends \BaseController {
                 $collection->description = $postman_collection->description;
                 $collection->project_id = $project->id;
                 $collection->save();
+                $collection->order = $postman_collection->order;
                 $collections[$postman_collection->id] = $collection;
             }
 
@@ -47,8 +48,17 @@ class PostmanController extends \BaseController {
                 if( !empty($postman_request->folder) && !empty($collections[$postman_request->folder]) ){
                     $request->collection_id = $collections[$postman_request->folder]->id;
                 } else {
-                    $request->project_id = $project->id;
+                    foreach( $collections as $key => $collection ){
+                        if( empty($collection->order) ) continue;
+                        foreach( $collection->order as $request_id ){
+                            if( $postman_request->id == $request_id ){
+                                $request->collection_id = $collection->id;
+                            }
+                        }
+                    }
                 }
+
+                if( empty($request->collection_id) ) $request->project_id = $project->id;
 
                 $request->name = $postman_request->name;
                 $request->description = $postman_request->description;
@@ -56,7 +66,6 @@ class PostmanController extends \BaseController {
 
                 $request->url = $postman_request->url;
                 $request->method = $postman_request->method;
-
 
                 // SET HEADERS
                 if( !empty($postman_request->headers) ){
