@@ -118,8 +118,8 @@ class PostmanController extends \BaseController {
                 // x.requests.forEach(function(item){ console.log( item.name + ' --- ' + item.method + ' --- ' + item.dataMode + '---->' + JSON.stringify(item.data)) });
                 $request->save();
             }
-
-            $project->addMember($user_id);
+            // member is creating project so they should be able to remove it
+            $project->addMember($user_id,1);
         }
 
     }
