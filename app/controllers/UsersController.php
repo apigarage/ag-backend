@@ -31,6 +31,17 @@ class UsersController extends \BaseController {
     public function store()
     {
         $input = Input::all();
+
+        $validator = Validator::make($input, [
+            'email' => 'required|email|unique:users',
+            'name' => 'required',
+            'password' => 'required',
+        ]);
+        if ($validator->fails())
+        {
+            return Response::json( $validator->messages() , 400);
+        }
+
         $user = User::create($input);
         return Response::json( $user, 201 );
     }
