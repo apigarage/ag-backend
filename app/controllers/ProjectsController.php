@@ -115,7 +115,9 @@ class ProjectsController extends \BaseController {
         if( ! $this->has_access($id, 'delete') ) return Response::json([], 401);
 
         UserProject::where('project_id', '=', $id)->delete();
-        Project::find($id)->delete();
+        $project = Project::find($id);
+        $project->deleteChildren();       
+        $project->delete();
 
         return Response::json([], 204);
     }

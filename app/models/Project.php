@@ -57,4 +57,15 @@ class Project extends Model {
         return $this->hasMany('Environment');
     }
 
+    public function deleteChildren(){
+        $this->environments()->delete();
+        $this->items()->delete();
+        $collections = Collection::where('project_id', $this->id)->get();
+
+        foreach($collections as $collection){
+            $collection->items()->delete();
+            $collection->delete();
+        }
+    }
+
 }
