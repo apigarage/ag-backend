@@ -68,4 +68,13 @@ class Project extends Model {
         }
     }
 
+    public function notifyMemberOfSharedProject($to_email){
+        $current_resource_owner = Authorizer::getResourceOwnerId();
+        $user = User::find($current_resource_owner)->toArray();
+        Mail::send('emails.shareSuccess', [ 'user' => $user , 'project' => $this->toArray() ], function($message)
+        {
+            $message->to($to_email)->subject('Project Shared With you');
+        });
+    }
+
 }

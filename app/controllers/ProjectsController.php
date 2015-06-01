@@ -79,7 +79,7 @@ class ProjectsController extends \BaseController {
      * @return Response
      */
     public function update($id)
-    {
+    {       
         if( ! $this->has_access( $id ) ) return Response::json([], 401);
 
         $project = Project::find($id);
@@ -92,7 +92,9 @@ class ProjectsController extends \BaseController {
             if( empty( $user ) ){
                 return Response::json(['message'=>'user not found'], 404);
             }
+            
             $user_project = $project->addMember( $user->id );
+            $project->notifyMemberOfSharedProject($email);
         }
         else
         {
