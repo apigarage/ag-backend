@@ -79,7 +79,7 @@ class ProjectsController extends \BaseController {
      * @return Response
      */
     public function update($id)
-    {       
+    {
         if( ! $this->has_access( $id ) ) return Response::json([], 401);
 
         $project = Project::find($id);
