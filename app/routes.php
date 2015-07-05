@@ -10,7 +10,7 @@ Route::get('/', function() {
 
 /**
  * Publicly Avaialable Routes.
- * TODO - Please lock this with client-id and secret. 
+ * TODO - Please lock this with client-id and secret.
  */
 Route::group(array('prefix' => 'api'), function()
 {
@@ -18,7 +18,7 @@ Route::group(array('prefix' => 'api'), function()
 });
 
 /**
- * API Blocked Routes. 
+ * API Blocked Routes.
  */
 Route::group(array('prefix' => 'api','before' => 'oauth'), function()
 {
@@ -35,4 +35,22 @@ Route::group(array('prefix' => 'api','before' => 'oauth'), function()
     Route::resource('items', 'ItemsController');
     Route::resource('postman', 'PostmanController', ['only' =>['store']]);
 
+});
+
+/**
+ * Super Admin Endpoints.
+ */
+Route::group(array('prefix' => 'sa','before' => 'oauth|isSuperAdmin'), function()
+{
+    Route::resource('analytics', 'AnalyticsController', ['only'=>['index']]);
+});
+
+Route::filter('isSuperAdmin', function()
+{
+    $resource_owner_id = Authorizer::getResourceOwnerId();
+    $user = User::find($resource_owner_id);
+    if($user->email != 'chinmay@chinmay.ca')
+    {
+      App::abort(401, 'YOU ARE NOT A SUPER USER, YET.');
+    }
 });
