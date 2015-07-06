@@ -1,11 +1,11 @@
 <?php
 
 Route::post('oauth/token', function() {
-    return Response::json(Authorizer::issueAccessToken());
+  return Response::json(Authorizer::issueAccessToken());
 });
 
 Route::get('/', function() {
-    return "API Documentation will go here... ";
+  return "API Documentation will go here... ";
 });
 
 /**
@@ -14,7 +14,7 @@ Route::get('/', function() {
  */
 Route::group(array('prefix' => 'api'), function()
 {
-    Route::resource('users', 'UsersController', ['only'=>['store']]);
+  Route::resource('users', 'UsersController', ['only'=>['store']]);
 });
 
 /**
@@ -22,18 +22,18 @@ Route::group(array('prefix' => 'api'), function()
  */
 Route::group(array('prefix' => 'api','before' => 'oauth'), function()
 {
-    Route::get('/', function()
-    {
-        return Response::json( array('success' => 'Yey, you have access to the secure part of the API now') );
-    });
+  Route::get('/', function()
+  {
+    return Response::json( array('success' => 'Yey, you have access to the secure part of the API now') );
+  });
 
-    Route::resource('users', 'UsersController', ['only'=>['show','update']]);
-    Route::resource('projects', 'ProjectsController');
-    Route::resource('collections', 'CollectionsController');
-    Route::resource('projects.environments', 'EnvironmentsController');
-    Route::resource('environments.vars', 'EnvironmentVarsController');
-    Route::resource('items', 'ItemsController');
-    Route::resource('postman', 'PostmanController', ['only' =>['store']]);
+  Route::resource('users', 'UsersController', ['only'=>['show','update']]);
+  Route::resource('projects', 'ProjectsController');
+  Route::resource('collections', 'CollectionsController');
+  Route::resource('projects.environments', 'EnvironmentsController');
+  Route::resource('environments.vars', 'EnvironmentVarsController');
+  Route::resource('items', 'ItemsController');
+  Route::resource('postman', 'PostmanController', ['only' =>['store']]);
 
 });
 
@@ -42,15 +42,15 @@ Route::group(array('prefix' => 'api','before' => 'oauth'), function()
  */
 Route::group(array('prefix' => 'sa','before' => 'oauth|isSuperAdmin'), function()
 {
-    Route::resource('analytics', 'AnalyticsController', ['only'=>['index']]);
+  Route::resource('analytics', 'AnalyticsController', ['only'=>['index']]);
 });
 
 Route::filter('isSuperAdmin', function()
 {
-    $resource_owner_id = Authorizer::getResourceOwnerId();
-    $user = User::find($resource_owner_id);
-    if($user->email != 'chinmay@chinmay.ca')
-    {
-      App::abort(401, 'YOU ARE NOT A SUPER USER, YET.');
-    }
+  $resource_owner_id = Authorizer::getResourceOwnerId();
+  $user = User::find($resource_owner_id);
+  if($user->email != 'chinmay@chinmay.ca')
+  {
+    App::abort(401, 'YOU ARE NOT A SUPER USER, YET.');
+  }
 });

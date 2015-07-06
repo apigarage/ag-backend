@@ -9,19 +9,19 @@ use \Esensi\Model\Model;
 
 class User extends Model implements UserInterface, RemindableInterface {
 
-    use UserTrait, RemindableTrait;
+  use UserTrait, RemindableTrait;
 
-    /**
-     * The database table used by the model.
-     *
-     * @var string
-     */
-    protected $table = 'users';
-    protected $fillable = ['name','email','password'];
-    protected $hidden = array('password', 'remember_token');
-    protected $hashable = [ 'password' ];
+  /**
+   * The database table used by the model.
+   *
+   * @var string
+   */
+  protected $table = 'users';
+  protected $fillable = ['name','email','password'];
+  protected $hidden = array('password', 'remember_token');
+  protected $hashable = [ 'password' ];
 
-    public function projects(){
-        return $this->belongsToMany('Project','user_project','user_id','project_id');
-    }
+  public function projects(){
+    return $this->belongsToMany('Project','user_project','user_id','project_id');
+  }
 }

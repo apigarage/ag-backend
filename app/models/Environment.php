@@ -4,11 +4,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Environment extends Model {
 
-    protected $fillable = ['name', 'description', 'project_id'];
-    protected $table = 'environments';
+  protected $fillable = ['name', 'description', 'project_id'];
+  protected $table = 'environments';
 
-    public function vars(){
-        return $this->hasMany('EnvironmentVar');
-    }
+  public function vars(){
+    return $this->hasMany('EnvironmentVar');
+  }
 
 }

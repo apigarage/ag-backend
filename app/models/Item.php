@@ -3,28 +3,28 @@
 
 class Item extends Eloquent {
 
-    protected $fillable = ['author_id','uuid','collection_id','project_id','name','description','url','method','headers','data'];
-    protected $table = 'items';
+  protected $fillable = ['author_id','uuid','collection_id','project_id','name','description','url','method','headers','data'];
+  protected $table = 'items';
 
-    public function getHeaderAttribute($value)
-    {
-        return json_decode($value);
-    }
+  public function getHeaderAttribute($value)
+  {
+    return json_decode($value);
+  }
 
-    // public function getDataAttribute($value)
-    // {
-    //     return json_decode( $value )
-    // }
+  // public function getDataAttribute($value)
+  // {
+  //   return json_decode( $value )
+  // }
 
-    // public function setDataAttribute($value)
-    // {
-    //     return json_encode( $value )
-    // }
+  // public function setDataAttribute($value)
+  // {
+  //   return json_encode( $value )
+  // }
 
-    public function setHeaderAttribute($value)
-    {
-        return json_encode($value);
-    }
+  public function setHeaderAttribute($value)
+  {
+    return json_encode($value);
+  }
 
 
 
