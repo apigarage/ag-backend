@@ -93,6 +93,7 @@ class ProjectsController extends \BaseController {
                 return Response::json(['message'=>'user not found'], 404);
             }
             $user_project = $project->addMember( $user->id );
+            // $project->notifyMemberOfSharedProject($email);
         }
         else
         {
