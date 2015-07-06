@@ -7,12 +7,12 @@
 <?php
 
 return array(
-    /* Database */
-    'db_type'	     => '_______',
-    'db_host'      => '_______',
-    'db_name'      => '_______',
-    'db_username'  => '_______',
-    'db_password'  => '_______',
+  /* Database */
+  'db_type' => '_______',
+  'db_host' => '_______',
+  'db_name' => '_______',
+  'db_username' => '_______',
+  'db_password' => '_______',
 );
 ```
 ## Run Migrations
