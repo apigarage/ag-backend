@@ -12,5 +12,4 @@
 */
 
 Artisan::add(new addSequenceForRequests);
-Artisan::add(new MigrateKeys);
 Artisan::add(new MigrateEnviromentVars);
