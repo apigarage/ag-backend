@@ -79,7 +79,8 @@ class EnvironmentsController extends \BaseController {
   {
     if( ! $this->has_access($id) ) return Response::json([], 401);
 
-    $environment = Environment::with('vars')->find($id);
+    $environment = Environment::find($id);
+    $environment->vars = $environment->vars();
     if( empty($environment) ) return Response::json([], 404);
 
     return Response::json($environment, 200);
