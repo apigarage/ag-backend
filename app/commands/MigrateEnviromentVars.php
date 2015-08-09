@@ -37,27 +37,29 @@ class MigrateEnviromentVars extends Command {
     */
     public function fire()
     {
-        $all_env_vars = EnvironmentVar::all();
-        for($i = 0; $i < count($all_env_vars); $i++)
+         $all_env_vars = EnvironmentVar::all()->toArray();
+        for($i = 0 ; $i < count($all_env_vars) ; $i++)
         {
-            $key = Key::where('name' , '=' , $all_env_vars[$i]->name)->first();
-            // make sure key exists
-            if(empty($key))
-            {
-                $key = new Key();
-                $key->name = trim($all_env_vars[$i]->name);
-                $key->save();
-            }
+            $environment = Environment::find($all_env_vars[$i]['environment_id']);
+            $key_exists = ProjectKey::where('name' ,'=' ,$all_env_vars[$i]['name'])
+                                    ->where('project_id', '=', $environment->project_id)->first();
 
-            $environment_key = EnvironmentKey::where('environment_id', '=', $all_env_vars[$i]->environment_id)
-                                            ->where('key_id', '=', $key->id)
-                                            ->where('value', '=', $all_env_vars[$i]->value)->first();
+            if(empty($key_exists))
+            {
+                $key_exists = new ProjectKey();
+                $key_exists->name = trim($all_env_vars[$i]['name']);
+                $key_exists->project_id = trim($environment->project_id);
+                $key_exists->save();
+            }
+            $environment_key = ProjectKeyEnvironment::where('environment_id', '=', $all_env_vars[$i]['environment_id'])
+                                            ->where('project_key_id', '=', $key_exists->id)
+                                            ->where('value', '=', $all_env_vars[$i]['value'])->first();
             if(empty($environment_key))
             {
-                $environment_key = new EnvironmentKey();
-                $environment_key->value =  $all_env_vars[$i]->value;
-                $environment_key->environment_id =  $all_env_vars[$i]->environment_id;
-                $environment_key->key_id =  $key->id;
+                $environment_key = new ProjectKeyEnvironment();
+                $environment_key->value =  $all_env_vars[$i]['value'];
+                $environment_key->environment_id =  $all_env_vars[$i]['environment_id'];
+                $environment_key->project_key_id =  $key_exists->id;
                 $environment_key->save();
             }
         }

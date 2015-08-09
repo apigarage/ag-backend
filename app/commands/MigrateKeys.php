@@ -37,14 +37,18 @@ class MigrateKeys extends Command {
     */
     public function fire()
     {
-        $all_env_keys = EnvironmentVar::select( DB::raw('DISTINCT(name)') )->get()->toArray();
-        $existing_keys = Key::select( DB::raw('DISTINCT(name)') )->get()->toArray();
+        $all_env_keys = EnvironmentVar::all()->toArray();
         for($i = 0 ; $i < count($all_env_keys) ; $i++)
         {
-            if(!in_array($all_env_keys[$i], $existing_keys))
+            $environment = Environment::find($all_env_keys[$i]['environment_id']);
+            $key_exists = ProjectKey::where('name' ,'=' ,$all_env_keys[$i]['name'])
+                                    ->where('project_id', '=', $environment->project_id)->first();
+
+            if(empty($key_exists))
             {
-                $new_key = new Key();
+                $new_key = new ProjectKey();
                 $new_key->name = trim($all_env_keys[$i]['name']);
+                $new_key->project_id = trim($environment->project_id);
                 $new_key->save();
                 unset($new_key);
             }
