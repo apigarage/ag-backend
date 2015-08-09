@@ -44,7 +44,7 @@ class MigrateKeys extends Command {
             if(!in_array($all_env_keys[$i], $existing_keys))
             {
                 $new_key = new Key();
-                $new_key->name = $all_env_keys[$i]['name'];
+                $new_key->name = trim($all_env_keys[$i]['name']);
                 $new_key->save();
                 unset($new_key);
             }

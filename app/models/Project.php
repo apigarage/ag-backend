@@ -34,7 +34,7 @@ class Project extends Model {
     $environments = $project->environments()->get();
     $environments_response = [];
     foreach ($environments as $environment) {
-      $environment->vars = $environment->vars()->get();
+      $environment->vars = $environment->keys()->get();
       array_push($environments_response, $environment);
     }
     $project->environments = $environments_response;

@@ -45,7 +45,7 @@ class MigrateEnviromentVars extends Command {
             if(empty($key))
             {
                 $key = new Key();
-                $key->name = $all_env_vars[$i]->name;
+                $key->name = trim($all_env_vars[$i]->name);
                 $key->save();
             }
 
