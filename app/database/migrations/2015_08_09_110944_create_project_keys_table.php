@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateProjectKeyEnvironmentTable extends Migration {
+class CreateProjectKeysTable extends Migration {
 
   /**
    * Run the migrations.
@@ -12,12 +12,11 @@ class CreateProjectKeyEnvironmentTable extends Migration {
    */
   public function up()
   {
-    Schema::create('project_key_environment', function(Blueprint $table)
+    Schema::create('project_keys', function(Blueprint $table)
     {
       $table->increments('id');
-      $table->integer('environment_id');
-      $table->integer('project_key_id');
-      $table->string('value', 255);
+      $table->integer('project_id');
+      $table->string('name', 255);
       $table->timestamps();
     });
   }
@@ -29,7 +28,7 @@ class CreateProjectKeyEnvironmentTable extends Migration {
    */
   public function down()
   {
-    Schema::drop('project_key_environment');
+    Schema::drop('project_keys');
   }
 
 }

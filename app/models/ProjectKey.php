@@ -3,6 +3,6 @@
 class ProjectKey extends Eloquent {
 
   protected $fillable = ['name','project_id'];
-  protected $table = 'project_key';
+  protected $table = 'project_keys';
 
 }
