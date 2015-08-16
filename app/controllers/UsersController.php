@@ -35,7 +35,7 @@ class UsersController extends \BaseController {
     $validator = Validator::make($input, [
       'email' => 'required|email|unique:users',
       'name' => 'required',
-      'password' => 'required',
+      'password' => 'required|min:8',
     ]);
     if ($validator->fails())
     {
@@ -90,7 +90,7 @@ class UsersController extends \BaseController {
   // public function destroy($id)
   // {
   //   // TODO - Allow only if $id is the same one as the logged in user.
-    
+
   //   $user = User::find($id);
   //   if( empty($user) ) return Response::json([], 404);
 

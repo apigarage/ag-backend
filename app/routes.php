@@ -15,6 +15,9 @@ Route::get('/', function() {
 Route::group(array('prefix' => 'api'), function()
 {
   Route::resource('users', 'UsersController', ['only'=>['store']]);
+  Route::post('send_reset_code', 'PasswordResetController@send_reset_code');
+  Route::post('verify_code', 'PasswordResetController@verify_code');
+  Route::post('reset_password', 'PasswordResetController@reset_password');
 });
 
 /**
