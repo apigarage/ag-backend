@@ -66,6 +66,9 @@ class EnvironmentsController extends \BaseController {
     $input = Input::all();
     $input["project_id"] = $project_id;
     $environment = Environment::create($input);
+    // creates all 
+    $environment->createProjectKeyEnvironments();
+    $environment->vars = $environment->vars();
     return Response::json( $environment, 201 );
   }
 

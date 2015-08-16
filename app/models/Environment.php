@@ -19,4 +19,23 @@ class Environment extends Model {
     }
     return $vars;
   }
+
+  public function createProjectKeyEnvironments()
+  {
+    $projectKeys = ProjectKey::where('project_id','=',$this->project_id)->get();
+    foreach ($projectKeys as $projectKey) 
+    {
+      // check if it exists 
+      $exists = ProjectKeyEnvironment::where('project_key_id' , '=', $projectKey->id)
+                                      ->where('environment_id', '=', $this->id)->first();
+      if(empty($exists))
+      {
+        $new_project_key_environment = new ProjectKeyEnvironment();
+        $new_project_key_environment->environment_id = $this->id;
+        $new_project_key_environment->project_key_id = $projectKey->id;
+        $new_project_key_environment->save();
+        unset($new_project_key_environment);
+      }
+    }
+  } 
 }

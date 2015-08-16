@@ -32,6 +32,7 @@ Route::group(array('prefix' => 'api','before' => 'oauth'), function()
   Route::resource('collections', 'CollectionsController');
   Route::resource('projects.environments', 'EnvironmentsController');
   Route::resource('environments.vars', 'EnvironmentVarsController');
+  Route::resource('projects.keys', 'PorjectKeyEnvironmentController');
   Route::resource('items', 'ItemsController');
   Route::resource('postman', 'PostmanController', ['only' =>['store']]);
 
