@@ -2,7 +2,7 @@
 
 class PorjectKeyEnvironmentController extends \BaseController {
 
-	  /*
+    /*
    * @resouce_id: project_id
    * @acceess_type: 'read','write','delete'
    * TODO: Implement access_type properly.
@@ -28,90 +28,108 @@ class PorjectKeyEnvironmentController extends \BaseController {
     return false;
   }
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index($project_id)
-	{
-		if( ! $this->has_access($project_id) ) return Response::json([], 401);
+  /**
+   * Display a listing of the resource.
+   *
+   * @return Response
+   */
+  public function index($project_id)
+  {
+    if( ! $this->has_access($project_id) ) return Response::json([], 401);
 
     $projectKeys = ProjectKey::getProjectKeyEnvironments($project_id);
     if( empty($projectKeys) ) return Response::json([], 404);
     
     return Response::json($projectKeys, 200);
-	}
+  }
 
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
-		//
-	}
+  /**
+   * Show the form for creating a new resource.
+   *
+   * @return Response
+   */
+  public function create()
+  {
+  }
 
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
-	{
-		//
-	}
+  /**
+   * Store a newly created resource in storage.
+   *
+   * @return Response
+   */
+  public function store($project_id)
+  {    
+    $input['name'] = Input::all();
+    if( ! $this->has_access($project_id) ) return Response::json([], 401);
+    $input['project_id'] = $project_id;
+    if(!empty($input['name']))
+    {
+      $key_exists = ProjectKey::where('project_id', '=', $project_id)
+                                ->where('name', '=', $input['name'])->first();
+      if(empty($key_exists))
+      {
+        $projectKey = ProjectKey::create($input);
+        $projectKey->createProjectKeyEnvironments();
+        if( empty($projectKey) ) return Response::json([], 404);
+        
+        return Response::json($projectKey, 200);
+      }
+       // resource already exist conflict
+      return Response::json([], 409);
+    }
+    /// bad request
+    return Response::json([], 400);
+  }
 
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
+  /**
+   * Display the specified resource.
+   *
+   * @param  int  $id
+   * @return Response
+   */
+  public function show($id)
+  {
+    //
+  }
 
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
+  /**
+   * Show the form for editing the specified resource.
+   *
+   * @param  int  $id
+   * @return Response
+   */
+  public function edit($id)
+  {
+    //
+  }
 
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
+  /**
+   * Update the specified resource in storage.
+   *
+   * @param  int  $id
+   * @return Response
+   */
+  public function update($id)
+  {
+    //
+  }
 
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  int  $id
+   * @return Response
+   */
+  public function destroy($id)
+  {
+    //
+  }
 
 
 }

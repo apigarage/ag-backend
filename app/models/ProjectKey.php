@@ -28,4 +28,26 @@ class ProjectKey extends Eloquent {
     return $project_key_environments_array;
   }
 
+  // create a project key environment for the new key 
+  public function createProjectKeyEnvironments()
+  {
+    $envrioments = Environment::where('project_id', '=', $this->project_id)->get();
+    if(!empty($envrioments))
+    {
+      foreach ($envrioments as $envrioment) 
+      {
+        $exits = ProjectKeyEnvironment::where('project_key_id', '=' , $this->id)
+                                    ->where('environment_id', '=' , $envrioment->id )->first();
+        if(empty($exits))
+        {
+          $new_project_key_environment = new ProjectKeyEnvironment();
+          $new_project_key_environment->project_key_id = $this->id;
+          $new_project_key_environment->environment_id = $envrioment->id ;
+          $new_project_key_environment->save();
+        }
+
+      }
+    }
+  }
+
 }
