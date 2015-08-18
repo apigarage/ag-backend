@@ -50,4 +50,17 @@ class ProjectKey extends Eloquent {
     }
   }
 
+  public function deleteAsscoatedKeyEnvironments()
+  {
+    $all_associated_values =ProjectKeyEnvironment::where('project_key_id', '=' , $this->id)->get();
+    if(!empty($all_associated_values))
+    {
+      $count = count($all_associated_values);
+      for($i =0 ; $i < $count ; $i++)
+      {
+        $all_associated_values[$i]->delete();
+      }
+    }
+  }
+
 }

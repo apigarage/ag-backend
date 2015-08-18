@@ -45,16 +45,6 @@ class PorjectKeyEnvironmentController extends \BaseController {
 
 
   /**
-   * Show the form for creating a new resource.
-   *
-   * @return Response
-   */
-  public function create()
-  {
-  }
-
-
-  /**
    * Store a newly created resource in storage.
    *
    * @return Response
@@ -85,38 +75,28 @@ class PorjectKeyEnvironmentController extends \BaseController {
 
 
   /**
-   * Display the specified resource.
-   *
-   * @param  int  $id
-   * @return Response
-   */
-  public function show($id)
-  {
-    //
-  }
-
-
-  /**
-   * Show the form for editing the specified resource.
-   *
-   * @param  int  $id
-   * @return Response
-   */
-  public function edit($id)
-  {
-    //
-  }
-
-
-  /**
    * Update the specified resource in storage.
    *
    * @param  int  $id
    * @return Response
    */
-  public function update($id)
+  public function update($project_key_environment_id)
   {
-    //
+    $input = Input::all();
+    if(!empty($input['name']))
+    {
+      $project_key_environment = ProjectKeyEnvironment::find($project_key_environment_id);
+      if(!empty($project_key_environment))
+      {
+        $project_key_environment->name = $input['name'];
+        $project_key_environment->save();
+        return Response::json($project_key_environment, 200);
+      }
+       // resource not found
+      return Response::json([], 404);
+    }
+    /// bad request
+    return Response::json([], 400);
   }
 
 
@@ -126,9 +106,18 @@ class PorjectKeyEnvironmentController extends \BaseController {
    * @param  int  $id
    * @return Response
    */
-  public function destroy($id)
+  public function destroy($project_key_id)
   {
-    //
+    $project_key = ProjectKey::find($project_key_id);
+
+    if(!empty($project_key))
+    {
+      $project_key->deleteAsscoatedKeyEnvironments()
+      $project_key->delete();
+      return Response::json([], 200);
+    }
+
+    return Response::json([], 404);
   }
 
 
