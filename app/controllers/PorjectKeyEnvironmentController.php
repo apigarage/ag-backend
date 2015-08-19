@@ -51,7 +51,7 @@ class PorjectKeyEnvironmentController extends \BaseController {
    */
   public function store($project_id)
   {    
-    $input['name'] = Input::all();
+    $input['name'] = Input::get('name');
     if( ! $this->has_access($project_id) ) return Response::json([], 401);
     $input['project_id'] = $project_id;
     if(!empty($input['name']))
@@ -80,15 +80,17 @@ class PorjectKeyEnvironmentController extends \BaseController {
    * @param  int  $id
    * @return Response
    */
-  public function update($project_key_environment_id)
+  public function update($project_id,$project_key_environment_id)
   {
-    $input = Input::all();
-    if(!empty($input['name']))
+    if( ! $this->has_access($project_id) ) return Response::json([], 401);
+
+    $input['value'] = Input::get('value');
+    if(!empty($input['value']))
     {
       $project_key_environment = ProjectKeyEnvironment::find($project_key_environment_id);
       if(!empty($project_key_environment))
       {
-        $project_key_environment->name = $input['name'];
+        $project_key_environment->value = $input['value'];
         $project_key_environment->save();
         return Response::json($project_key_environment, 200);
       }
@@ -106,13 +108,15 @@ class PorjectKeyEnvironmentController extends \BaseController {
    * @param  int  $id
    * @return Response
    */
-  public function destroy($project_key_id)
+  public function destroy($project_id, $project_key_id)
   {
+    if( !$this->has_access($project_id) ) return Response::json([], 401);
+
     $project_key = ProjectKey::find($project_key_id);
 
     if(!empty($project_key))
     {
-      $project_key->deleteAsscoatedKeyEnvironments()
+      $project_key->deleteAsscoatedKeyEnvironments();
       $project_key->delete();
       return Response::json([], 200);
     }
