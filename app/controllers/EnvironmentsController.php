@@ -66,6 +66,9 @@ class EnvironmentsController extends \BaseController {
     $input = Input::all();
     $input["project_id"] = $project_id;
     $environment = Environment::create($input);
+    // creates all 
+    $environment->createProjectKeyEnvironments();
+    $environment->vars = $environment->vars();
     return Response::json( $environment, 201 );
   }
 
@@ -80,6 +83,7 @@ class EnvironmentsController extends \BaseController {
     if( ! $this->has_access($id) ) return Response::json([], 401);
 
     $environment = Environment::find($id);
+    $environment->vars = $environment->vars();
     if( empty($environment) ) return Response::json([], 404);
 
     return Response::json($environment, 200);
@@ -114,6 +118,7 @@ class EnvironmentsController extends \BaseController {
   {
     if( ! $this->has_access($id, 'delete')) return Response::json([], 401);
     $environment = Environment::find($id);
+    $environment->deleteProjectKeyEnvironments()
     if($environment) $environment->delete();
     return Response::json([], 204);
   }
