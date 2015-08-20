@@ -28,51 +28,6 @@ class PorjectKeyEnvironmentController extends \BaseController {
     return false;
   }
 
-  /**
-   * Display a listing of the resource.
-   *
-   * @return Response
-   */
-  public function index($project_id)
-  {
-    if( ! $this->has_access($project_id) ) return Response::json([], 401);
-
-    $projectKeys = ProjectKey::getProjectKeyEnvironments($project_id);
-    if( empty($projectKeys) ) return Response::json([], 404);
-    
-    return Response::json($projectKeys, 200);
-  }
-
-
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @return Response
-   */
-  public function store($project_id)
-  {    
-    $input['name'] = Input::get('name');
-    if( ! $this->has_access($project_id) ) return Response::json([], 401);
-    $input['project_id'] = $project_id;
-    if(!empty($input['name']))
-    {
-      $key_exists = ProjectKey::where('project_id', '=', $project_id)
-                                ->where('name', '=', $input['name'])->first();
-      if(empty($key_exists))
-      {
-        $projectKey = ProjectKey::create($input);
-        $projectKey->createProjectKeyEnvironments();
-        if( empty($projectKey) ) return Response::json([], 404);
-        
-        return Response::json($projectKey, 200);
-      }
-       // resource already exist conflict
-      return Response::json([], 409);
-    }
-    /// bad request
-    return Response::json([], 400);
-  }
-
 
   /**
    * Update the specified resource in storage.
@@ -80,14 +35,15 @@ class PorjectKeyEnvironmentController extends \BaseController {
    * @param  int  $id
    * @return Response
    */
-  public function update($project_id,$project_key_environment_id)
+  public function update($project_id,$project_key_id, $environment_id)
   {
     if( ! $this->has_access($project_id) ) return Response::json([], 401);
 
     $input['value'] = Input::get('value');
     if(!empty($input['value']))
     {
-      $project_key_environment = ProjectKeyEnvironment::find($project_key_environment_id);
+      $project_key_environment = ProjectKeyEnvironment::where('project_key_id', '=', $project_key_id)
+                                                        ->where('environment_id', '=', $environment_id)->first();
       if(!empty($project_key_environment))
       {
         $project_key_environment->value = $input['value'];
@@ -100,29 +56,5 @@ class PorjectKeyEnvironmentController extends \BaseController {
     /// bad request
     return Response::json([], 400);
   }
-
-
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param  int  $id
-   * @return Response
-   */
-  public function destroy($project_id, $project_key_id)
-  {
-    if( !$this->has_access($project_id) ) return Response::json([], 401);
-
-    $project_key = ProjectKey::find($project_key_id);
-
-    if(!empty($project_key))
-    {
-      $project_key->deleteAsscoatedKeyEnvironments();
-      $project_key->delete();
-      return Response::json([], 200);
-    }
-
-    return Response::json([], 404);
-  }
-
 
 }

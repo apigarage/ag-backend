@@ -118,6 +118,7 @@ class EnvironmentsController extends \BaseController {
   {
     if( ! $this->has_access($id, 'delete')) return Response::json([], 401);
     $environment = Environment::find($id);
+    $environment->deleteProjectKeyEnvironments()
     if($environment) $environment->delete();
     return Response::json([], 204);
   }

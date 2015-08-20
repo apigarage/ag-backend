@@ -38,4 +38,13 @@ class Environment extends Model {
       }
     }
   } 
+
+  public function deleteProjectKeyEnvironments()
+  {
+    $environment_values = ProjectKeyEnvironment::where('environment_id', '=', $this->id)->first();
+    foreach ($environment_values as $environment_value) 
+    {
+        $environment_value->delete();
+    }
+  } 
 }
