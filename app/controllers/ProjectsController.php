@@ -52,8 +52,18 @@ class ProjectsController extends \BaseController {
   public function store()
   {
     $input = Input::all();
-    $project = Project::create($input);
-    $user_project = $project->addMember( Authorizer::getResourceOwnerId(), 1 );
+    DB::beginTransaction();
+    try{
+      $project = Project::create($input);
+      $user_project = $project->addMember( Authorizer::getResourceOwnerId(), 1 );
+    } catch (Exception $e){
+      // if creation failed roll back and return 500 
+      DB::rollback();
+      return Response::json(["meesage" => $e->getMessage() ], 500 );
+    }
+
+    DB::commit();
+
     return Response::json( $project, 201 );
   }
 
@@ -115,11 +125,20 @@ class ProjectsController extends \BaseController {
   {
     if( ! $this->has_access($id, 'delete') ) return Response::json([], 401);
 
-    UserProject::where('project_id', '=', $id)->delete();
-    $project = Project::find($id);
-    $project->deleteChildren();     
-    $project->delete();
+    DB::beginTransaction();
+    try{
+      UserProject::where('project_id', '=', $id)->delete();
+      $project = Project::find($id);
+      $project->deleteChildren();     
+      $project->delete();
+    } catch (Exception $e){
+      // if creation failed roll back and return 500 
+      DB::rollback();
+      return Response::json(["meesage" => $e->getMessage() ], 500 );
+    }
 
+    DB::commit();
+    
     return Response::json([], 204);
   }
 }
