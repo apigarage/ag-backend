@@ -65,10 +65,21 @@ class EnvironmentsController extends \BaseController {
   {
     $input = Input::all();
     $input["project_id"] = $project_id;
-    $environment = Environment::create($input);
-    // creates all 
-    $environment->createProjectKeyEnvironments();
+    $environment = array();
+    DB::beginTransaction();
+    try{
+      $environment = Environment::create($input);
+      // creates all 
+      $environment->createProjectKeyEnvironments();
+    } catch (Exception $e){
+      // if creation failed roll back and return 500 
+      DB::rollback();
+      return Response::json(["meesage" => $e->getMessage() ], 500 );
+    }
+
+    DB::commit();
     $environment->vars = $environment->vars();
+
     return Response::json( $environment, 201 );
   }
 
@@ -118,9 +129,22 @@ class EnvironmentsController extends \BaseController {
   {
     if( ! $this->has_access($id, 'delete')) return Response::json([], 401);
     $environment = Environment::find($id);
-    $environment->deleteProjectKeyEnvironments()
-    if($environment) $environment->delete();
-    return Response::json([], 204);
+    if(!empty($environment)){
+      DB::beginTransaction();
+      try{
+        $environment->deleteProjectKeyEnvironments();
+        $environment->delete();
+      } catch (Exception $e){
+        // if creation failed roll back and return 500 
+        DB::rollback();
+        return Response::json(["meesage" => $e->getMessage() ], 500 );
+      }
+
+      DB::commit();
+      return Response::json([], 204);
+    }
+    // not found
+    return Response::json([], 404);
   }
 
 }

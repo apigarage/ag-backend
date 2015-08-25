@@ -33,7 +33,7 @@ class Environment extends Model {
         $new_project_key_environment = new ProjectKeyEnvironment();
         $new_project_key_environment->environment_id = $this->id;
         $new_project_key_environment->project_key_id = $project_key->id;
-        $new_project_key_environment->save();
+        $new_project_key_environment->save();        
         unset($new_project_key_environment);
       }
     }
@@ -41,10 +41,13 @@ class Environment extends Model {
 
   public function deleteProjectKeyEnvironments()
   {
-    $environment_values = ProjectKeyEnvironment::where('environment_id', '=', $this->id)->first();
-    foreach ($environment_values as $environment_value) 
-    {
-        $environment_value->delete();
+    $environment_values = ProjectKeyEnvironment::where('environment_id', '=', $this->id)->get();
+    if(!empty($environment_values)){
+      $count = count($environment_values);
+      for($i = 0 ; $i < $count ; $i++) 
+      {
+          $environment_values[$i]->delete();
+      }
     }
   } 
 }

@@ -60,9 +60,17 @@ class PorjectKeyController extends \BaseController {
                                 ->where('name', '=', $input['name'])->first();
       if(empty($key_exists))
       {
-        $projectKey = ProjectKey::create($input);
-        $projectKey->createProjectKeyEnvironments();
-        if( empty($projectKey) ) return Response::json([], 404);
+        DB::beginTransaction();
+        try{
+          $projectKey = ProjectKey::create($input);
+          $projectKey->createProjectKeyEnvironments();
+        } catch (Exception $e){
+          // if creation failed roll back and return 500 
+          DB::rollback();
+          return Response::json(["meesage" => $e->getMessage() ], 500 );
+        }
+
+        DB::commit();
         
         return Response::json($projectKey, 200);
       }
@@ -116,9 +124,18 @@ class PorjectKeyController extends \BaseController {
 
     if(!empty($project_key))
     {
-      $project_key->deleteAsscoatedKeyEnvironments();
-      $project_key->delete();
-      return Response::json([], 200);
+      DB::beginTransaction();
+      try{
+        $project_key->deleteAsscoatedKeyEnvironments();
+        $project_key->delete();
+      } catch (Exception $e){
+        // if creation failed roll back and return 500 
+        DB::rollback();
+        return Response::json(["meesage" => $e->getMessage() ], 500 );
+      }
+      DB::commit();
+      
+      return Response::json([], 204);
     }
 
     return Response::json([], 404);
