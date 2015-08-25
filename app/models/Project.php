@@ -71,7 +71,8 @@ class Project extends Model {
   public function notifyMemberOfSharedProject($to_email){
     $current_resource_owner = Authorizer::getResourceOwnerId();
     $user = User::find($current_resource_owner)->toArray();
-    Mail::send('emails.shareSuccess', [ 'user' => $user , 'project' => $this->toArray() ], function($message) use($to_email)
+    $content = View::make('emails.shareSuccess' , array( 'user' => $user , 'project' => $this->toArray() ));
+    Mail::send('emails.master', ['content' => $content], function($message) use($to_email)
     {
        $message->to($to_email)->subject('Project Shared With you');
     });
