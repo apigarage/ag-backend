@@ -11,9 +11,10 @@ class EmailsController extends \BaseController {
   public function index()
   {
     $view_name = Input::get('name');
-    $project = Project::find(1)->toArray();
-    $user = User::find(1)->toArray();
-    $content = View::make('emails.' . $view_name, array('user' => $user, 'project' => $project));
-    return  View::make('emails.master', array('content' => $content));
+    $params['project'] = Project::find(1)->toArray();
+    $params['user'] = User::find(1)->toArray();
+    $params['title'] = $view_name;
+    $params['content'] = View::make('emails.' . $view_name, array('params' => $params));
+    return  View::make('emails.master', array('params' => $params));
   }
 }

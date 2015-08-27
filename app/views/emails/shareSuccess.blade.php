@@ -17,7 +17,7 @@
         <tbody>
          <tr>
          <td style="font-family: 'Oxygen',  Helvetica, arial, sans-serif; font-size: 26px; color: #55626c; text-align:left; line-height: 36px;  text-transform:uppercase;">
-         <p style="font-weight:700; line-height: 36px;">Shared Project</p>
+         <p style="font-weight:700; line-height: 36px;">{{$params['title']}}</p>
         </td>
          </tr>
         </tbody>
@@ -34,7 +34,7 @@
          <tr>
           <td td style="font-family: 'Oxygen', Helvetica, arial, sans-serif; font-size: 14px; color: #95a5a6; text-align:left; line-height: 28px;">
          <p style="margin-bottom:40px !important; line-height: 28px;">
-            {{$user['email'] }} has shared project {{$project['name']}} with you.</p>
+            {{$params['user']['email'] }} has shared project {{$params['project']['name']}} with you.</p>
         </td>
          </tr>
         </tbody>

@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
-  <title>Cover Responsive Mail Template</title>
+  <title>{{$params['title']}}</title>
   <style type="text/css">
     @import url(http://fonts.googleapis.com/css?family=Oxygen:400,300,700);
 
@@ -97,15 +97,15 @@
                     <tbody>
                       <tr>
                         <td align="center">
-                          <table width="155" cellpadding="0" cellspacing="0" border="0" align="left" class="devicewidth">
+                          <table width="155" cellpadding="0" cellspacing="0" border="0" class="devicewidth">
                             <tbody>
                               <tr>
                                 <td align="center">
                                   <table width="155" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidthinner">
                                     <tr>
                                       <td valign="top">
-                                        <a href="http://demo.puriwp.com/cover/" target="_blank" >
-                                          <img src="http://demo.puriwp.com/cover/images/cover-logo.png" alt="logo" border="0" width="78" height="30" style="display:inline-block; border:none; outline:none; text-decoration:none;"><!--change image logo with your own logo just replace the link "http://demo.puriwp.com/cover/images/cover-logo.png"-->
+                                        <a href="http://apigarage.com" target="_blank" >
+                                          <img src="{{ asset('images/emails/api-garage-logo-large.png')}}" alt="logo" border="0" width="200" height="78" style="display:inline-block; border:none; outline:none; text-decoration:none;"><!--change image logo with your own logo just replace the link "http://demo.puriwp.com/cover/images/cover-logo.png"-->
                                         </a>
                                       </td>
                                     </tr>
@@ -114,7 +114,7 @@
                               </tr>
                             </tbody>
                           </table>
-                          <table width="155" cellpadding="0" cellspacing="0" border="0" align="right" class="devicewidth">
+                          <!-- <table width="155" cellpadding="0" cellspacing="0" border="0" align="right" class="devicewidth">
                             <tbody>
                               <tr>
                                 <td align="center">
@@ -128,7 +128,7 @@
                                 </td>
                               </tr>
                             </tbody>
-                          </table>
+                          </table> -->
                         </td>
                       </tr>
                     </tbody>
@@ -144,7 +144,7 @@
       </tr>
     </tbody>
   </table><!--end full text-->
-   {{ $content }}
+   {{ $params['content'] }}
   <table width="100%" bgcolor="#484e50" cellpadding="0" cellspacing="0" border="0" id="backgroundTable" st-sortable="full-text"><!--full text-->
     <tbody>
       <tr>
@@ -159,21 +159,6 @@
                         <td align="center">
                           <table width="375" align="center" cellpadding="0" cellspacing="0" border="0" class="devicewidthinner">
                             <tbody>
-                              <!-- Spacing -->
-                              <tr>
-                                <td width="100%" height="123"></td>
-                              </tr>
-                              <!-- Spacing -->
-                              <tr>
-                                <td style="font-family: 'Oxygen', Helvetica, arial, sans-serif; font-size: 18px; color: #838d90; text-align:center; line-height: 20px; font-weight:400;" st-title="fulltext-title">
-                                  2014 © cover-magazine. All Rights Reserved.
-                                </td>
-                              </tr>
-                              <!-- Spacing -->
-                              <tr>
-                                <td width="100%" height="35">
-                                </td>
-                              </tr>
                               <!-- Spacing -->
                               <tr>
                                 <td align="center">
