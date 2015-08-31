@@ -86,7 +86,7 @@
     <tbody>
       <tr>
         <td align="center">
-          <table width="800" bgcolor="#fcb041" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
+          <table width="800" bgcolor="#FFFFFF" cellpadding="0" cellspacing="0" border="0" align="center" class="devicewidth">
             <tbody>
               <tr><!--spacing-->
                 <td width="100%" height="30"></td>
@@ -105,7 +105,7 @@
                                     <tr>
                                       <td valign="top">
                                         <a href="http://apigarage.com" target="_blank" >
-                                          <img src="{{ asset('images/emails/api-garage-logo-large.png')}}" alt="logo" border="0" width="200" height="78" style="display:inline-block; border:none; outline:none; text-decoration:none;"><!--change image logo with your own logo just replace the link "http://demo.puriwp.com/cover/images/cover-logo.png"-->
+                                          <img src="{{ asset('images/emails/api-garage-logo-large.png')}}" alt="logo" border="0" width="150" height="78" style="display:inline-block; border:none; outline:none; text-decoration:none;"><!--change image logo with your own logo just replace the link "http://demo.puriwp.com/cover/images/cover-logo.png"-->
                                         </a>
                                       </td>
                                     </tr>
@@ -159,6 +159,12 @@
                         <td align="center">
                           <table width="375" align="center" cellpadding="0" cellspacing="0" border="0" class="devicewidthinner">
                             <tbody>
+
+                              <!-- Spacing -->
+                              <tr>
+                                <td width="100%" height="180">
+                                </td>
+                              </tr>
                               <!-- Spacing -->
                               <tr>
                                 <td align="center">
