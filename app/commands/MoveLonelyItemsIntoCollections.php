@@ -38,6 +38,9 @@ class MoveLonelyItemsIntoCollections extends Command {
   public function fire()
   {
     // get all projects that have lonely items 
+    $projects_updated_count = 0;
+    $collections_created_count = 0;
+    $items_moved_count = 0;
     $items = Item::whereNull('collection_id')->select('project_id')->distinct()->get()->toArray();
     // create collections first    
     DB::beginTransaction();
@@ -47,11 +50,15 @@ class MoveLonelyItemsIntoCollections extends Command {
       $project = Project::find($item['project_id']);
       if(!empty($project))
       {
+        // if we found a project we are going to move the item so that project counts as updated
+        $projects_updated_count++;
         // if collection already exists then ignore otherwise create new one
         $collection = Collection::where('project_id', '=', $project->id)
                                   ->where('name' , '=', 'Other')->first();
         if(empty($collection))
         {
+          // only creating of collections count
+          $collections_created_count++;
           $collection = new Collection();
           $collection->project_id = $project->id;
           $collection->name = 'Other';
@@ -72,11 +79,17 @@ class MoveLonelyItemsIntoCollections extends Command {
                                   ->where('name' , '=', 'Other')->first();
       if(!empty($collection))
       {
+
+        // only when we move the item we count it
+        $items_moved_count++;
         $items[$i]->collection_id = $collection->id;
         $items[$i]->save();
       }
     }
     DB::commit();
+    echo "Number of Projects Updated are {$projects_updated_count}\n";
+    echo "Number of Collections Created are {$collections_created_count}\n";
+    echo "Number of Items Moved are {$items_moved_count}\n";
   }
 
   /**
