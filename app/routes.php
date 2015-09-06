@@ -8,6 +8,9 @@ Route::get('/', function() {
   return "API Documentation will go here... ";
 });
 
+
+Route::resource('emails', 'EmailsController', ['only' =>['index']]);
+
 /**
  * Publicly Avaialable Routes.
  * TODO - Please lock this with client-id and secret.
@@ -39,7 +42,6 @@ Route::group(array('prefix' => 'api','before' => 'oauth'), function()
   Route::resource('projects.keys', 'PorjectKeyController');
   Route::resource('items', 'ItemsController');
   Route::resource('postman', 'PostmanController', ['only' =>['store']]);
-
 });
 
 /**
