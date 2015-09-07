@@ -43,6 +43,7 @@ class UsersController extends \BaseController {
     }
 
     $user = User::create($input);
+    SharedProject::checkSharedProjects($user);
     return Response::json( $user, 201 );
   }
 
