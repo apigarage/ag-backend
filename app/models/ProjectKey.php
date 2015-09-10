@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class ProjectKey extends Eloquent {
 
@@ -7,7 +7,7 @@ class ProjectKey extends Eloquent {
 
   // return all ProjectKeyEnvironment associated with porject id
   public static function getProjectKeyEnvironments($project_id)
-  { 
+  {
     $project_key_environments_array = array();
     $keys = ProjectKey::where('project_id', '=', $project_id)->get();
     if(!empty($keys))
@@ -16,7 +16,7 @@ class ProjectKey extends Eloquent {
         $project_key_environments = ProjectKeyEnvironment::where('project_key_id', '=' , $key->id)->get();
         if(!empty($project_key_environments))
         {
-          foreach ($project_key_environments as $project_key_environment) 
+          foreach ($project_key_environments as $project_key_environment)
           {
             $project_key_environment->project_id = $key->project_id;
             array_push($project_key_environments_array, $project_key_environment);
@@ -28,13 +28,13 @@ class ProjectKey extends Eloquent {
     return $project_key_environments_array;
   }
 
-  // create a project key environment for the new key 
+  // create a project key environment for the new key
   public function createProjectKeyEnvironments()
   {
     $envrioments = Environment::where('project_id', '=', $this->project_id)->get();
     if(!empty($envrioments))
     {
-      foreach ($envrioments as $envrioment) 
+      foreach ($envrioments as $envrioment)
       {
         $exits = ProjectKeyEnvironment::where('project_key_id', '=' , $this->id)
                                     ->where('environment_id', '=' , $envrioment->id )->first();

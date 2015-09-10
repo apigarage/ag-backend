@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,10 +37,14 @@ class Project extends Model {
       $environment->vars = $environment->vars();
       array_push($environments_response, $environment);
     }
-    $project->environments = $environments_response;
 
-    // Get all the environments
-    $project->items = $project->items()->get();
+    // Get all the project keys
+    $project->environments = $environments_response;
+    $project->keys = $project->keys()->get();
+
+    // // Get all the items
+    // Will be deprecated
+    // $project->items = $project->items()->get();
 
     return $project;
   }
@@ -55,6 +59,10 @@ class Project extends Model {
 
   public function environments(){
     return $this->hasMany('Environment');
+  }
+
+  public function keys(){
+    return $this->hasMany('ProjectKey');
   }
 
   public function deleteChildren(){
