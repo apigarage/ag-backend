@@ -83,7 +83,7 @@ class Project extends Model {
   }
 
   public function sendSignUpEmailWithProjectInvitation($to_email){
-    $shared_project = SharedProject::where('email', '=', $to_email)
+    $shared_project = ProjectInvitation::where('email', '=', $to_email)
                                       ->where('project_id', '=', $this->id )->first();
     // if there exists a project shared then don't share
     if(empty($share_project))
@@ -95,7 +95,7 @@ class Project extends Model {
       $params['project'] = $this->toArray() ;
       $params['title'] ='Shared A Project' ;
 
-      $share_project = new SharedProject();
+      $share_project = new ProjectInvitation();
       $share_project->from_user = $user['id'] ;
       $share_project->project_id = $this->id ;
       $share_project->email = $to_email ;

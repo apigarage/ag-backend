@@ -30,7 +30,7 @@ class CreateSharedProjectsTable extends Migration {
    */
   public function down()
   {
-    Schema::drop('shared_projects');
+    Schema::drop('project_invitations');
   }
 
 }
