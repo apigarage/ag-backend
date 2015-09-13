@@ -35,12 +35,12 @@ class PorjectKeyEnvironmentController extends \BaseController {
    * @param  int  $id
    * @return Response
    */
-  public function update($project_id,$project_key_id, $environment_id)
+  public function update($project_id, $project_key_id, $environment_id)
   {
     if( ! $this->has_access($project_id) ) return Response::json([], 401);
 
     $input['value'] = Input::get('value');
-    if(!empty($input['value']))
+    if(isset($input['value']))
     {
       $project_key_environment = ProjectKeyEnvironment::where('project_key_id', '=', $project_key_id)
                                                         ->where('environment_id', '=', $environment_id)->first();

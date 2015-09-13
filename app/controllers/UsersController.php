@@ -43,6 +43,7 @@ class UsersController extends \BaseController {
     }
 
     $user = User::create($input);
+    ProjectInvitation::checkProjectInvitations($user);
     return Response::json( $user, 201 );
   }
 

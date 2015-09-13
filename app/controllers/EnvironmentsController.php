@@ -9,14 +9,12 @@ class EnvironmentsController extends \BaseController {
    * TODO: Implement access_type properly.
    * TODO: This function should be either part of global model or the Project model.
    */
-  private function has_access($resource_id, $access_type='read'){
+  private function has_access($project_id, $access_type='read'){
     $current_resource_owner = Authorizer::getResourceOwnerId();
 
     if( $current_resource_owner ){
 
-      $resource = Environment::find($resource_id);
-
-      $user_project = UserProject::where('project_id','=',$resource->project_id)
+      $user_project = UserProject::where('project_id','=', $project_id)
               ->where('user_id', '=', $current_resource_owner)
               ->first();
 
@@ -63,16 +61,23 @@ class EnvironmentsController extends \BaseController {
    */
   public function store($project_id)
   {
+    if( ! $this->has_access($project_id) ) return Response::json([], 401);
+
     $input = Input::all();
     $input["project_id"] = $project_id;
     $environment = array();
     DB::beginTransaction();
-    try{
+    try
+    {
+      if(!empty($input['private']))
+      {
+        $input['author_id'] = Authorizer::getResourceOwnerId();
+      }
       $environment = Environment::create($input);
-      // creates all 
+      // creates all
       $environment->createProjectKeyEnvironments();
     } catch (Exception $e){
-      // if creation failed roll back and return 500 
+      // if creation failed roll back and return 500
       DB::rollback();
       return Response::json(["meesage" => $e->getMessage() ], 500 );
     }
@@ -91,7 +96,7 @@ class EnvironmentsController extends \BaseController {
    */
   public function show($project_id, $id)
   {
-    if( ! $this->has_access($id) ) return Response::json([], 401);
+    if( ! $this->has_access($project_id) ) return Response::json([], 401);
 
     $environment = Environment::find($id);
     $environment->vars = $environment->vars();
@@ -108,7 +113,7 @@ class EnvironmentsController extends \BaseController {
    */
   public function update($project_id, $id)
   {
-    if( ! $this->has_access( $id ) ) return Response::json([], 401);
+    if( ! $this->has_access($project_id) ) return Response::json([], 401);
 
     $environment = Environment::find($id);
 
@@ -125,9 +130,10 @@ class EnvironmentsController extends \BaseController {
    * @param  int  $id
    * @return Response
    */
-  public function destroy($id)
+  public function destroy($project_id, $id)
   {
-    if( ! $this->has_access($id, 'delete')) return Response::json([], 401);
+    if( ! $this->has_access($project_id, 'delete')) return Response::json([], 401);
+
     $environment = Environment::find($id);
     if(!empty($environment)){
       DB::beginTransaction();
@@ -135,7 +141,7 @@ class EnvironmentsController extends \BaseController {
         $environment->deleteProjectKeyEnvironments();
         $environment->delete();
       } catch (Exception $e){
-        // if creation failed roll back and return 500 
+        // if creation failed roll back and return 500
         DB::rollback();
         return Response::json(["meesage" => $e->getMessage() ], 500 );
       }

@@ -20,7 +20,7 @@ class PorjectKeyController extends \BaseController {
       // If user is a resource member
       if( $user_project ){
         // If delete permission are required and the member has the permissions
-        if( $access_type == 'delete' && $user_project->permission_id != 1 ) return false;
+        // if( $access_type == 'delete' && $user_project->permission_id != 1 ) return false;
         // if simple read permissions are required.
         return true;
       }
@@ -39,7 +39,7 @@ class PorjectKeyController extends \BaseController {
 
     $projectKeys = ProjectKey::getProjectKeyEnvironments($project_id);
     if( empty($projectKeys) ) return Response::json([], 404);
-    
+
     return Response::json($projectKeys, 200);
   }
 
@@ -50,35 +50,33 @@ class PorjectKeyController extends \BaseController {
    * @return Response
    */
   public function store($project_id)
-  {    
-    $input['name'] = Input::get('name');
+  {
     if( ! $this->has_access($project_id) ) return Response::json([], 401);
-    $input['project_id'] = $project_id;
-    if(!empty($input['name']))
-    {
-      $key_exists = ProjectKey::where('project_id', '=', $project_id)
-                                ->where('name', '=', $input['name'])->first();
-      if(empty($key_exists))
-      {
-        DB::beginTransaction();
-        try{
-          $projectKey = ProjectKey::create($input);
-          $projectKey->createProjectKeyEnvironments();
-        } catch (Exception $e){
-          // if creation failed roll back and return 500 
-          DB::rollback();
-          return Response::json(["meesage" => $e->getMessage() ], 500 );
-        }
 
-        DB::commit();
-        
-        return Response::json($projectKey, 200);
+    $input['project_id'] = $project_id;
+    $input['name'] = Input::get('name', '');
+
+    $key_exists = ProjectKey::where('project_id', '=', $project_id)
+      ->where('name', '=', $input['name'])->first();
+
+    if(empty($key_exists))
+    {
+      DB::beginTransaction();
+      try{
+        $projectKey = ProjectKey::create($input);
+        $projectKey->createProjectKeyEnvironments();
+      } catch (Exception $e){
+        // if creation failed roll back and return 500
+        DB::rollback();
+        return Response::json(["meesage" => $e->getMessage() ], 500 );
       }
-       // resource already exist conflict
-      return Response::json([], 409);
+
+      DB::commit();
+
+      return Response::json($projectKey, 200);
     }
-    /// bad request
-    return Response::json([], 400);
+    // resource already exist conflict
+    return Response::json([], 409);
   }
 
 
@@ -129,12 +127,12 @@ class PorjectKeyController extends \BaseController {
         $project_key->deleteAsscoatedKeyEnvironments();
         $project_key->delete();
       } catch (Exception $e){
-        // if creation failed roll back and return 500 
+        // if creation failed roll back and return 500
         DB::rollback();
         return Response::json(["meesage" => $e->getMessage() ], 500 );
       }
       DB::commit();
-      
+
       return Response::json([], 204);
     }
 
