@@ -8,11 +8,15 @@ class Project extends Model {
   protected $table = 'projects';
 
   public function addMember($member_id, $permission_id = 0){
-    $user_project = UserProject::firstOrCreate([
-      'user_id' => $member_id,
-      'project_id' => $this->id,
-      'permission_id' => $permission_id
-    ]);
+    $user_project = UserProject::where('user_id', '=', $member_id)
+                          ->where('project_id', '=', $this->id)->first();
+    if(empty($user_project)){
+      $user_project = UserProject::firstOrCreate([
+        'user_id' => $member_id,
+        'project_id' => $this->id,
+        'permission_id' => $permission_id
+      ]);
+    }
 
     return $user_project;
   }
