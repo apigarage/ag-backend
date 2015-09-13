@@ -51,38 +51,35 @@ class MigrateEnviromentVars extends Command {
             // adds the project key
             $key_exists = ProjectKey::where('name' ,'=' ,$all_env_vars[$i]['name'])
                                     ->where('project_id', '=', $environment->project_id)->first();
-            // if environment does not exist we can not do anything 
-            if(!empty($environment))
+
+            if(!empty($all_env_vars[$i]['name']) && !empty($environment->name))
             {
-              if(!empty($all_env_vars[$i]['name']) && !empty($environment->name))
+              if(empty($key_exists))
               {
-                if(empty($key_exists))
-                {
-                  $key_exists = new ProjectKey();
-                  $key_exists->name = trim($all_env_vars[$i]['name']);
-                  $key_exists->project_id = trim($environment->project_id);
-                  $key_exists->save();
-                  $project_keys_created++;
-                }
+                $key_exists = new ProjectKey();
+                $key_exists->name = trim($all_env_vars[$i]['name']);
+                $key_exists->project_id = trim($environment->project_id);
+                $key_exists->save();
+                $project_keys_created++;
               }
-              // adds association to all environments dessicated with that project
-              if(!empty($key_exists)) 
+            }
+            // adds association to all environments dessicated with that project
+            if(!empty($key_exists) && !empty($key_exists->id)) 
+            {
+              // fill value for current environment var 
+              $environment_key = ProjectKeyEnvironment::where('environment_id', '=', $all_env_vars[$i]['environment_id'])
+                                                ->where('project_key_id', '=', $key_exists->id)
+                                                ->where('value', '=', $all_env_vars[$i]['value'])->first();
+              if(empty($environment_key))
               {
-                // fill value for current environment var 
-                $environment_key = ProjectKeyEnvironment::where('environment_id', '=', $all_env_vars[$i]['environment_id'])
-                                                  ->where('project_key_id', '=', $key_exists->id)
-                                                  ->where('value', '=', $all_env_vars[$i]['value'])->first();
-                if(empty($environment_key))
-                {
-                  $environment_key = new ProjectKeyEnvironment();
-                  $environment_key->value =  $all_env_vars[$i]['value'];
-                  $environment_key->environment_id =  $all_env_vars[$i]['environment_id'];
-                  $environment_key->project_key_id =  $key_exists->id;
-                  $environment_key->save();
-                  $project_keys_einvoemnet_created++;
-                }
-                $environment_var_converted++;
+                $environment_key = new ProjectKeyEnvironment();
+                $environment_key->value =  $all_env_vars[$i]['value'];
+                $environment_key->environment_id =  $all_env_vars[$i]['environment_id'];
+                $environment_key->project_key_id =  $key_exists->id;
+                $environment_key->save();
+                $project_keys_einvoemnet_created++;
               }
+              $environment_var_converted++;
             }
           }
         }
