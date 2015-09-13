@@ -90,4 +90,31 @@ class Project extends Model {
     });
   }
 
+  public function sendSignUpEmailWithProjectInvitation($to_email){
+    $shared_project = ProjectInvitation::where('email', '=', $to_email)
+                                      ->where('project_id', '=', $this->id )->first();
+    // if there exists a project shared then don't share
+    if(empty($share_project))
+    {
+
+      $current_resource_owner = Authorizer::getResourceOwnerId();
+      $user = User::find($current_resource_owner)->toArray();
+      $params['user'] = $user ;
+      $params['project'] = $this->toArray() ;
+      $params['title'] ='Shared A Project' ;
+
+      $share_project = new ProjectInvitation();
+      $share_project->from_user = $user['id'] ;
+      $share_project->project_id = $this->id ;
+      $share_project->email = $to_email ;
+      $share_project->save();
+
+      $params['content'] = View::make('emails.ShareSignup' , array( 'params' => $params));
+      Mail::send('emails.master', ['params' => $params], function($message) use($to_email)
+      {
+         $message->to($to_email)->subject('Project Shared With you');
+      });
+    }
+  }
+
 }
