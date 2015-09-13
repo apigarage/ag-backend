@@ -82,7 +82,7 @@ class Project extends Model {
     });
   }
 
-  public function sendSignUpEmailWithSharedProject($to_email){
+  public function sendSignUpEmailWithProjectInvitation($to_email){
     $shared_project = SharedProject::where('email', '=', $to_email)
                                       ->where('project_id', '=', $this->id )->first();
     // if there exists a project shared then don't share

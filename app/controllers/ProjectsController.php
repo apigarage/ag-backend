@@ -101,7 +101,7 @@ class ProjectsController extends \BaseController {
       $user = User::where('email','=',$email)->first();
       if( empty( $user ) ){
         // send email to user to sign up 
-        $project->sendSignUpEmailWithSharedProject($email);
+        $project->sendSignUpEmailWithProjectInvitation($email);
         return Response::json(['message'=>'user not found'], 404);
       }
       $user_project = $project->addMember( $user->id );
