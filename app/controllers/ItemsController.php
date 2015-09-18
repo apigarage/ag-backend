@@ -25,8 +25,12 @@ class ItemsController extends \BaseController {
     $input['author_id'] = Authorizer::getResourceOwnerId();
     $headers = Input::get('headers');
     if( isset($headers) ){
-      $input['headers'] = json_encode( Input::get('headers') );
-    }     
+      if ( is_string(Input::get('headers')) ) {
+        $input['headers'] = Input::get('headers');
+      }else{
+        $input['headers'] = json_encode( Input::get('headers') );
+      }
+    }
     $item = Item::create($input);
     return Response::json($item, 201);
   }
