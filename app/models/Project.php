@@ -61,6 +61,10 @@ class Project extends Model {
     return $this->hasMany('Item');
   }
 
+  public function users(){
+    return $this->hasMany('UserProject');
+  }
+
   public function environments(){
     return $this->hasMany('Environment');
   }
@@ -119,6 +123,34 @@ class Project extends Model {
          $message->to($to_email)->subject('Project Shared With you');
       });
     }
+  }
+
+  // gets all users that are associated with this project
+  public function getProjectUsers()
+  {
+    $project_users = array();
+    $users = $this->users()->get();
+    $user_ids = array();
+    if(!empty($users))
+    {
+      foreach ($users as $user)
+      {
+        // using this is faster than in_array
+        if(!isset($user_ids[$user->user_id]) && empty($user->deleted_at))
+        {
+          $current_user = User::find($user->user_id);
+          if(!empty($current_user))
+          {
+            $current_user->project_id = $this->id;
+            $current_user->permission_id =$user->permission_id;
+            $project_users[] = $current_user;
+          }
+          $user_ids[$user->user_id] = 0;
+        }
+      }
+    }
+
+    return $project_users;
   }
 
 }
