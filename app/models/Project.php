@@ -129,14 +129,14 @@ class Project extends Model {
   public function getProjectUsers()
   {
     $project_users = array();
-    $users = $this->users()->get();
+    $users = $this->users()->whereNull('deleted_at')->get();
     $user_ids = array();
     if(!empty($users))
     {
       foreach ($users as $user)
       {
         // using this is faster than in_array
-        if(!isset($user_ids[$user->user_id]) && empty($user->deleted_at))
+        if(!isset($user_ids[$user->user_id]))
         {
           $current_user = User::find($user->user_id);
           if(!empty($current_user))

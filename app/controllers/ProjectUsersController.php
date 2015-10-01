@@ -59,7 +59,7 @@ class ProjectUsersController extends \BaseController {
   {
     // only allows change of permission
     // make sure member has edit access
-    if( ! $this->has_access( $project_id ) ) return Response::json([], 401);
+    if( ! $this->has_access( $project_id, 'delete') ) return Response::json([], 401);
 
     $project = Project::find($project_id);
     $user = null;
