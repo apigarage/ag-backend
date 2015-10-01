@@ -35,6 +35,7 @@ Route::group(array('prefix' => 'api','before' => 'oauth'), function()
 
   Route::resource('users', 'UsersController', ['only'=>['show','update']]);
   Route::resource('projects', 'ProjectsController');
+  Route::resource('projects.users', 'ProjectUsersController');
   Route::resource('collections', 'CollectionsController');
   Route::resource('projects.environments', 'EnvironmentsController');
   Route::resource('projects.keys.environments', 'PorjectKeyEnvironmentController');
