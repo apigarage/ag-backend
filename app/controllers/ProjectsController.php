@@ -57,7 +57,7 @@ class ProjectsController extends \BaseController {
       $project = Project::create($input);
       $user_project = $project->addMember( Authorizer::getResourceOwnerId(), 1 );
     } catch (Exception $e){
-      // if creation failed roll back and return 500 
+      // if creation failed roll back and return 500
       DB::rollback();
       return Response::json(["meesage" => $e->getMessage() ], 500 );
     }
@@ -77,6 +77,7 @@ class ProjectsController extends \BaseController {
   {
     if( ! $this->has_access( $id ) ) return Response::json([], 401);
     $project = Project::getProjectWithCollectionandItems($id);
+    $project->cloneProject();
     if( empty($project) ) return Response::json([], 404);
 
     return Response::json($project, 200);
@@ -100,7 +101,7 @@ class ProjectsController extends \BaseController {
       $email = Input::get('email');
       $user = User::where('email','=',$email)->first();
       if( empty( $user ) ){
-        // send email to user to sign up 
+        // send email to user to sign up
         $project->sendSignUpEmailWithProjectInvitation($email);
         return Response::json(['message'=>'user not found'], 404);
       }
@@ -131,16 +132,16 @@ class ProjectsController extends \BaseController {
     try{
       UserProject::where('project_id', '=', $id)->delete();
       $project = Project::find($id);
-      $project->deleteChildren();     
+      $project->deleteChildren();
       $project->delete();
     } catch (Exception $e){
-      // if creation failed roll back and return 500 
+      // if creation failed roll back and return 500
       DB::rollback();
       return Response::json(["meesage" => $e->getMessage() ], 500 );
     }
 
     DB::commit();
-    
+
     return Response::json([], 204);
   }
 }

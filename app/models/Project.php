@@ -57,10 +57,6 @@ class Project extends Model {
     return $this->hasMany('Collection');
   }
 
-  public function items(){
-    return $this->hasMany('Item');
-  }
-
   public function environments(){
     return $this->hasMany('Environment');
   }
@@ -118,6 +114,37 @@ class Project extends Model {
       {
          $message->to($to_email)->subject('Project Shared With you');
       });
+    }
+  }
+
+  public function cloneProject()
+  {
+    // replicates the object without any ids
+    $new_project = $this->replicate();
+    // had to remove the relations so
+    // saving does not get confused
+    $keys = $new_project->keys ;
+    $environments = $new_project->environments;
+    $collections =  $new_project->collections;
+    unset($new_project->keys);
+    unset($new_project->environments);
+    unset($new_project->collections);
+    // save project
+    $new_project->push();
+    dd(json_encode($environments));
+    // save relations
+    foreach($environments as $environment) {
+      $new_envioment = $environment->replicate();
+      $new_envioment->project_id = $new_project->id;
+      $new_envioment->save();
+      unset($environments);
+    }
+
+    foreach($collections as $collection) {
+      $new_collection = $collection->replicate();
+      $new_collection->project_id = $new_project->id;
+      $new_collection->save();
+      unset($new_collection);
     }
   }
 
