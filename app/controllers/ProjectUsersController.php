@@ -66,7 +66,8 @@ class ProjectUsersController extends \BaseController {
     if( empty($project) ) return Response::json([], 404);
     DB::beginTransaction();
     try{
-      if( !empty( Input::get('permission_id') ) )
+      $permission_id = Input::get('permission_id', NULL);
+      if( $permission_id !== NULL )
       {
         $permission_id = Input::get('permission_id');
         $project_user = UserProject::where('project_id','=',$project_id)
