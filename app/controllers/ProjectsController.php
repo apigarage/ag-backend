@@ -144,4 +144,17 @@ class ProjectsController extends \BaseController {
 
     return Response::json([], 204);
   }
+
+  // makes a copy of
+  public function copy($id)
+  {
+    $project = Project::find($id);
+    if( ! $this->has_access($id, 'read') && $project->public == 0 ) return Response::json([], 401);
+    if(empty($project)) {
+       return Response::json(['message'=>'project not found'], 404);
+    }
+    $new_project = $project->cloneProject();
+
+    return Response::json( $new_project, 201 );
+  }
 }
