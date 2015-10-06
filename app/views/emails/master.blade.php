@@ -67,7 +67,7 @@
       }
       .mobile_link a[href^="tel"], .mobile_link a[href^="sms"] {
         text-decoration: default;
-        color: #ffffff !important; 
+        color: #ffffff !important;
         pointer-events: auto;
         cursor: default;
       }
@@ -105,7 +105,7 @@
                                     <tr>
                                       <td valign="top">
                                         <a href="http://apigarage.com" target="_blank" >
-                                          <img src="{{ asset('images/emails/api-garage-logo-large.png')}}" alt="logo" border="0" width="150" height="78" style="display:inline-block; border:none; outline:none; text-decoration:none;"><!--change image logo with your own logo just replace the link "http://demo.puriwp.com/cover/images/cover-logo.png"-->
+                                          <img src="{{ asset('images/emails/api-garage-logo-large.png')}}" alt="logo" border="0" width="150" style="display:inline-block; border:none; outline:none; text-decoration:none;"><!--change image logo with your own logo just replace the link "http://demo.puriwp.com/cover/images/cover-logo.png"-->
                                         </a>
                                       </td>
                                     </tr>
