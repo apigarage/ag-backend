@@ -155,6 +155,8 @@ class Project extends Model {
         foreach ($items as $item) {
           $new_item = $item->replicate();
           $new_item->collection_id = $new_collection->id;
+          // gets a new uuid
+          $new_item->uuid = HelperFunctions::UUIDGenerator();
           $new_item->save();
           unset($item);
         }
