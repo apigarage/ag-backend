@@ -77,7 +77,6 @@ class ProjectsController extends \BaseController {
   {
     if( ! $this->has_access( $id ) ) return Response::json([], 401);
     $project = Project::getProjectWithCollectionandItems($id);
-    $project->cloneProject();
     if( empty($project) ) return Response::json([], 404);
 
     return Response::json($project, 200);
@@ -150,8 +149,9 @@ class ProjectsController extends \BaseController {
   {
     $project = Project::find($id);
     if( ! $this->has_access($id, 'read') && $project->public == 0 ) return Response::json([], 401);
-    if(empty($project)) {
-       return Response::json(['message'=>'project not found'], 404);
+    if(empty($project))
+    {
+      return Response::json(['message'=>'project not found'], 404);
     }
     $new_project = $project->cloneProject();
 

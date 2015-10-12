@@ -60,7 +60,7 @@ class CommentsController extends \BaseController {
     $input = Input::all();
     $input['user_id'] = Authorizer::getResourceOwnerId();
     $input['item_id'] = $item->id;
-    $input['uuid'] = HelperFunctions::UUIDGenerator();
+    $input['uuid'] = HelperFn::UUIDGenerator();
     $comment_type = CommentType::where('name', '=', $input['type'])->first();
     $input['comment_type_id'] = $comment_type->id;
     // is not part of the table columns so unset before save

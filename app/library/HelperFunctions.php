@@ -3,7 +3,7 @@
 /*
  * This is a class of helper function that can be used any where in the system
 */
-class HelperFunctions {
+class HelperFn {
   public static function s4()
   {
     //
@@ -16,13 +16,13 @@ class HelperFunctions {
   // same function as one being used on front end
   public static function UUIDGenerator()
   {
-    return  HelperFunctions::s4() .
-            HelperFunctions::s4() . '-' .
-            HelperFunctions::s4() . '-' .
-            HelperFunctions::s4() . '-' .
-            HelperFunctions::s4() . '-' .
-            HelperFunctions::s4() .
-            HelperFunctions::s4() .
-            HelperFunctions::s4();
+    return  HelperFn::s4() .
+            HelperFn::s4() . '-' .
+            HelperFn::s4() . '-' .
+            HelperFn::s4() . '-' .
+            HelperFn::s4() . '-' .
+            HelperFn::s4() .
+            HelperFn::s4() .
+            HelperFn::s4();
   }
 }
