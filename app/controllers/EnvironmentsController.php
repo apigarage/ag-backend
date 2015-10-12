@@ -39,10 +39,10 @@ class EnvironmentsController extends \BaseController {
   {
     if( ! $this->has_access($project_id) ) return Response::json([], 401);
 
-    $vars = Environment::where('project_id','=',$project_id)->get();
-    if( empty($vars) ) return Response::json([], 404);
+    $environments = Project::find($project_id)->environments();
+    if( empty($environments) ) return Response::json([], 404);
 
-    return Response::json($vars, 200);
+    return Response::json($environments, 200);
   }
 
   /**
@@ -69,10 +69,8 @@ class EnvironmentsController extends \BaseController {
     DB::beginTransaction();
     try
     {
-      if(!empty($input['private']))
-      {
-        $input['author_id'] = Authorizer::getResourceOwnerId();
-      }
+
+      $input['author_id'] = Authorizer::getResourceOwnerId();
       $environment = Environment::create($input);
       // creates all
       $environment->createProjectKeyEnvironments();
@@ -99,8 +97,8 @@ class EnvironmentsController extends \BaseController {
     if( ! $this->has_access($project_id) ) return Response::json([], 401);
 
     $environment = Environment::find($id);
+    if(empty($environment) ) return Response::json([], 404);
     $environment->vars = $environment->vars();
-    if( empty($environment) ) return Response::json([], 404);
 
     return Response::json($environment, 200);
   }
