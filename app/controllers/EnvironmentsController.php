@@ -39,10 +39,10 @@ class EnvironmentsController extends \BaseController {
   {
     if( ! $this->has_access($project_id) ) return Response::json([], 401);
 
-    $vars = Environment::where('project_id','=',$project_id)->get();
-    if( empty($vars) ) return Response::json([], 404);
+    $environments = Project::find($project_id)->environments();
+    if( empty($environments) ) return Response::json([], 404);
 
-    return Response::json($vars, 200);
+    return Response::json($environments, 200);
   }
 
   /**
@@ -69,10 +69,8 @@ class EnvironmentsController extends \BaseController {
     DB::beginTransaction();
     try
     {
-      if(!empty($input['private']))
-      {
-        $input['author_id'] = Authorizer::getResourceOwnerId();
-      }
+
+      $input['author_id'] = Authorizer::getResourceOwnerId();
       $environment = Environment::create($input);
       // creates all
       $environment->createProjectKeyEnvironments();
@@ -99,8 +97,8 @@ class EnvironmentsController extends \BaseController {
     if( ! $this->has_access($project_id) ) return Response::json([], 401);
 
     $environment = Environment::find($id);
+    if(empty($environment) ) return Response::json([], 404);
     $environment->vars = $environment->vars();
-    if( empty($environment) ) return Response::json([], 404);
 
     return Response::json($environment, 200);
   }
@@ -119,9 +117,20 @@ class EnvironmentsController extends \BaseController {
 
     $input = Input::all();
     if( empty( $input ) ) return Response::json([], 400);
-    $environment->update($input);
+    if(!empty($environment))
+    {
+      // only allow update if public or is owner
+      if(! $environment->private || ($environment->private && $environment->author_id == Authorizer::getResourceOwnerId()))
+      {
+        $environment->update($input);
 
-    return Response::json($environment, 200);
+        return Response::json($environment, 200);
+      }
+
+      return Response::json([], 401);
+    }
+
+    return Response::json([], 404);
   }
 
   /**
@@ -135,19 +144,27 @@ class EnvironmentsController extends \BaseController {
     if( ! $this->has_access($project_id, 'delete')) return Response::json([], 401);
 
     $environment = Environment::find($id);
-    if(!empty($environment)){
-      DB::beginTransaction();
-      try{
-        $environment->deleteProjectKeyEnvironments();
-        $environment->delete();
-      } catch (Exception $e){
-        // if creation failed roll back and return 500
-        DB::rollback();
-        return Response::json(["meesage" => $e->getMessage() ], 500 );
+    if(!empty($environment))
+    {
+      // only allow deletion if resource owner
+      if($environment->private && $environment->author_id == Authorizer::getResourceOwnerId())
+      {
+        DB::beginTransaction();
+        try
+        {
+          $environment->deleteProjectKeyEnvironments();
+          $environment->delete();
+        } catch (Exception $e){
+          // if creation failed roll back and return 500
+          DB::rollback();
+          return Response::json(["meesage" => $e->getMessage() ], 500 );
+        }
+
+        DB::commit();
+        return Response::json([], 204);
       }
 
-      DB::commit();
-      return Response::json([], 204);
+      return Response::json([], 401);
     }
     // not found
     return Response::json([], 404);

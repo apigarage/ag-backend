@@ -35,7 +35,7 @@ class Project extends Model {
     $project->collections = $collections_response;
 
     // Get all the environments and variables
-    $environments = $project->environments()->get();
+    $environments = $project->environments();
     $environments_response = [];
     foreach ($environments as $environment) {
       $environment->vars = $environment->vars();
@@ -62,7 +62,32 @@ class Project extends Model {
   }
 
   public function environments(){
-    return $this->hasMany('Environment');
+    $public_environments = $this->publicEnvironments()->get();
+    $private_environments = $this->privateEnvironments()->get();
+
+    if(!empty($public_environments) && ! empty($private_environments))
+    {
+      return $public_environments->merge($private_environments);
+    }
+    else if(!empty($public_environments))
+    {
+      return $public_environments;
+    }
+    else if(!empty($private_environments))
+    {
+      return $private_environments;
+    }
+
+    return array();
+  }
+
+  private function publicEnvironments(){
+    return $this->hasMany('Environment')->where('private', '=', 0);
+  }
+
+  private function privateEnvironments(){
+    return $this->hasMany('Environment')->where('private', '=', 1)
+                                        ->where('author_id', '=', Authorizer::getResourceOwnerId() );
   }
 
   public function keys(){
@@ -70,7 +95,9 @@ class Project extends Model {
   }
 
   public function deleteChildren(){
-    $this->environments()->delete();
+    // split into two delete for public and private
+    $this->publicEnvironments()->delete();
+    $this->privateEnvironments()->delete();
     $this->items()->delete();
     $collections = Collection::where('project_id', $this->id)->get();
 
