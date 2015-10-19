@@ -1,7 +1,7 @@
 <?php
 
 
-class CommentsController extends \BaseController {
+class ActivitiesController extends \BaseController {
 
   /*
    * @resouce_id: project_id
@@ -40,10 +40,10 @@ class CommentsController extends \BaseController {
     if(empty($item)) return Response::json([], 404);
     if( ! $this->has_access( $item->project_id ) ) return Response::json([], 401);
 
-    $comments = $item->comments()->get();
-    if( empty($comments) ) return Response::json([], 404);
+    $activities = $item->activities()->get();
+    if( empty($activities) ) return Response::json([], 404);
 
-    return Response::json( $comments );
+    return Response::json( $activities );
   }
 
   /**
@@ -61,11 +61,13 @@ class CommentsController extends \BaseController {
     $input['user_id'] = Authorizer::getResourceOwnerId();
     $input['item_id'] = $item->id;
     $input['uuid'] = HelperFn::UUIDGenerator();
-    $comment_type = CommentType::where('name', '=', $input['type'])->first();
-    $input['comment_type_id'] = $comment_type->id;
+    $activity_type = ActivityType::where('name', '=', $input['type'])->first();
+    // resources were renamed but column name is still the same
+    // tables names as well
+    $input['comment_type_id'] = $activity_type->id;
     // is not part of the table columns so unset before save
     unset($input['type']);
-    $comment = Comment::create($input);
-    return Response::json($comment, 201);
+    $activity = Activity::create($input);
+    return Response::json($activity, 201);
   }
 }

@@ -42,7 +42,7 @@ Route::group(array('prefix' => 'api','before' => 'oauth'), function()
   Route::resource('environments.vars', 'EnvironmentVarsController');
   Route::resource('projects.keys', 'PorjectKeyController');
   Route::resource('items', 'ItemsController');
-  Route::resource('items.comments', 'CommentsController');
+  Route::resource('items.activities', 'ActivitiesController');
   Route::resource('postman', 'PostmanController', ['only' =>['store']]);
   Route::get('projects/{id}/clone',  array('uses' => 'ProjectsController@copy'));
 });

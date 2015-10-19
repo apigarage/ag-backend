@@ -26,8 +26,8 @@ class Item extends Eloquent {
     return json_encode($value);
   }
 
-  public function comments(){
-    return $this->hasMany('Comment');
+  public function activities(){
+    return $this->hasMany('Activity');
   }
 
 }
