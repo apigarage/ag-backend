@@ -57,7 +57,7 @@ class ProjectsController extends \BaseController {
       $project = Project::create($input);
       $user_project = $project->addMember( Authorizer::getResourceOwnerId(), 1 );
     } catch (Exception $e){
-      // if creation failed roll back and return 500 
+      // if creation failed roll back and return 500
       DB::rollback();
       return Response::json(["meesage" => $e->getMessage() ], 500 );
     }
@@ -131,16 +131,16 @@ class ProjectsController extends \BaseController {
     try{
       UserProject::where('project_id', '=', $id)->delete();
       $project = Project::find($id);
-      $project->deleteChildren();     
+      $project->deleteChildren();
       $project->delete();
     } catch (Exception $e){
-      // if creation failed roll back and return 500 
+      // if creation failed roll back and return 500
       DB::rollback();
       return Response::json(["meesage" => $e->getMessage() ], 500 );
     }
 
     DB::commit();
-    
+
     return Response::json([], 204);
   }
 }

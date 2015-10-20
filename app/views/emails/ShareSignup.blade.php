@@ -34,19 +34,25 @@
                             <tr>
                               <td td style="font-family: 'Oxygen', Helvetica, arial, sans-serif; font-size: 14px; color: #95a5a6; text-align:left; line-height: 28px;">
                                 <p style="margin-bottom:40px !important; line-height: 28px;">
-                                  {{$params['user']['email'] }} has shared project {{$params['project']['name']}} with you. We could not find you in our system. Please Signup to view project.
+                                  @if (empty($params['user']['name']))
+                                    {{$params['user']['email'] }}
+                                  @else
+                                    {{$params['user']['name'] }}
+                                  @endif
+                                  has invited you to be part of the project -- {{ $params['project']['name'] }} on API Garage. You can get started by downloading
+                                  the latest version at <a href="http://apigarage.com/download.html"> http://apigarage.com/download.html </a>.
                                 </p>
                                 <p>
-                                  When You sign Up you get:
+                                  After signing up, you will be able to:
                                   <ul>
-                                    <li>Access to all project documentation</li>
-                                    <li>Test End points with just one click!</li>
-                                    <li>Always up to date with project updates</li>
+                                    <li>Read access to all current project documentation</li>
+                                    <li>Write access to add to the documentation</li>
+                                    <li>Stay up to date with project updates</li>
                                     <li>Create you own environments to test projects with.</li>
+                                    <li>Test End points with just one click!</li>
                                   </ul>
-
                                 </p>
-                                <p>                                  
+                                <p>
                                   Thanks,<br/>
 
                                   API Garage Team.<br/>
