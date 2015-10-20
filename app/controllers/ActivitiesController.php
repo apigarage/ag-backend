@@ -38,7 +38,7 @@ class ActivitiesController extends \BaseController {
   {
     $item = Item::where('uuid' ,'=', $item_uuid)->first();
     if(empty($item)) return Response::json([], 404);
-    if( ! $this->has_access( $item->project_id ) ) return Response::json([], 401);
+    if( ! $this->has_access( $item->collection->project_id ) ) return Response::json([], 401);
 
     $activities = $item->activities()->with('ActivityType')->get();
     if( empty($activities) ) return Response::json([], 404);
@@ -55,7 +55,7 @@ class ActivitiesController extends \BaseController {
   {
     $item = Item::where('uuid' ,'=', $item_uuid)->first();
     if(empty($item)) return Response::json([], 404);
-    if( ! $this->has_access( $item->project_id ) ) return Response::json([], 401);
+    if( ! $this->has_access( $item->collection->project_id ) ) return Response::json([], 401);
 
     $input = Input::all();
     $input['user_id'] = Authorizer::getResourceOwnerId();

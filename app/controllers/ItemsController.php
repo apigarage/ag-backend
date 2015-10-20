@@ -4,17 +4,6 @@
 class ItemsController extends \BaseController {
 
   /**
-   * Display a listing of the resource.
-   *
-   * @return Response
-   */
-  // public function index()
-  // {
-  //   return Item::all()->toJSON();
-  // }
-
-
-  /**
    * Store a newly created resource in storage.
    *
    * @return Response
