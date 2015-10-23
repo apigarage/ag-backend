@@ -30,4 +30,8 @@ class Item extends Eloquent {
     return $this->hasMany('Activity');
   }
 
+  public function collection(){
+    return $this->belongsTo('Collection');
+  }
+
 }
