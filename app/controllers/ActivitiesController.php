@@ -68,4 +68,40 @@ class ActivitiesController extends \BaseController {
     $activity = Activity::create($input);
     return Response::json($activity, 201);
   }
+
+  /**
+   * Update a resource in storage
+   *
+   * @return Response
+   */
+  public function update($item_uuid, $activity_uuid)
+  {
+    $item = Item::where('uuid' ,'=', $item_uuid)->first();
+    if(empty($item)) return Response::json([], 404);
+    if( ! $this->has_access( $item->collection->project_id ) ) return Response::json([], 401);
+
+    $activity = Activity::where('uuid', '=', $activity_uuid)->first();
+    $input = ['description' => Input::get('description')];
+
+    $activity->update($input);
+    return Response::json($activity, 200);
+  }
+
+
+  /**
+   * Remove the specified resource from storage.
+   *
+   * @param  int  $id
+   * @return Response
+   */
+  public function destroy($item_uuid, $activity_uuid)
+  {
+    $item = Item::where('uuid' ,'=', $item_uuid)->first();
+    if(empty($item)) return Response::json([], 404);
+    if( ! $this->has_access( $item->collection->project_id ) ) return Response::json([], 401);
+
+    $activity = Activity::where('uuid', '=', $activity_uuid)->first();
+    $activity->delete();
+    return Response::json([], 204);
+  }
 }
