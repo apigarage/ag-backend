@@ -12,14 +12,14 @@ class PostmanController extends \BaseController {
   public function store()
   {
     $user_id = Authorizer::getResourceOwnerId();
-    
+
     if (Input::hasFile('file'))
     {
       // gets path to the file
       $path = Input::file('file')->getRealPath();
-      // gets all content 
+      // gets all content
       $postman_data = File::get($path);
-      
+
       $postman_data = json_decode($postman_data);
 
       $project = new Project;
@@ -30,6 +30,15 @@ class PostmanController extends \BaseController {
 
       $collections = array();
 
+      // Create a new Category for "Other Enpoints". Endpoints which
+      // do not exists in any folder.
+      $others_collection = new Collection;
+      $others_collection->name = 'Other Endpoints';
+      $others_collection->description = 'Collection of misc endpoints';
+      $others_collection->project_id = $project->id;
+      $others_collection->save();
+
+      // Create all the categories
       foreach($postman_data->folders as $postman_collection ){
         $collection = new Collection;
         $collection->name = $postman_collection->name;
@@ -40,11 +49,14 @@ class PostmanController extends \BaseController {
         $collections[$postman_collection->id] = $collection;
       }
 
+      // Create all the requests
       foreach($postman_data->requests as $postman_request){
         $request = new Item;
         $request->uuid = uniqid();
         $request->author_id = $user_id;
 
+        // If request is part of a category
+        // and if the category already exists in the DB
         if( !empty($postman_request->folder) && !empty($collections[$postman_request->folder]) ){
           $request->collection_id = $collections[$postman_request->folder]->id;
         } else {
@@ -58,7 +70,8 @@ class PostmanController extends \BaseController {
           }
         }
 
-        if( empty($request->collection_id) ) $request->project_id = $project->id;
+        // If no category, use "Other Endpoints" category
+        if( empty($request->collection_id) ) $request->collection_id = $others_collection->id;
 
         $request->name = $postman_request->name;
         $request->description = $postman_request->description;
@@ -83,14 +96,14 @@ class PostmanController extends \BaseController {
         $request->data = null;
         switch ($postman_request->dataMode) {
           case 'params':
-            //if method is get 
+            //if method is get
             $params_string = http_build_query($postman_request->data, '?');
             if(strlen($params_string) > 0 ){
               if(strcasecmp($postman_request->method, 'GET') == 0){
                 $request->url .= $params_string;
               } else {
                 $request->data = $params_string;
-              } 
+              }
             }
             break;
 
@@ -99,14 +112,14 @@ class PostmanController extends \BaseController {
             break;
 
           case 'urlencoded':
-            //if method is get 
+            //if method is get
             $params_string = '?' . http_build_query ($postman_request->data);
             if(strlen($params_string) > 0 ){
               if(strcasecmp($postman_request->method, 'GET') == 0){
                 $request->url .= $params_string;
               } else {
                 $request->data = $params_string;
-              } 
+              }
             }
             break;
 
