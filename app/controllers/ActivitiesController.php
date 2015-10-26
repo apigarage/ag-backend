@@ -40,7 +40,7 @@ class ActivitiesController extends \BaseController {
     if(empty($item)) return Response::json([], 404);
     if( ! $this->has_access( $item->collection->project_id ) ) return Response::json([], 401);
 
-    $activities = $item->activities()->with('ActivityType')->get();
+    $activities = $item->activities()->with('ActivityType', 'User')->get();
     if( empty($activities) ) return Response::json([], 404);
 
     return Response::json( $activities );
