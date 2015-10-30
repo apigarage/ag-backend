@@ -66,6 +66,7 @@ class ActivitiesController extends \BaseController {
     // is not part of the table columns so unset before save
     unset($input['type']);
     $activity = Activity::create($input);
+    $activity = Activity::where('uuid', '=', $activity->uuid)->with('ActivityType', 'User')->first();
     return Response::json($activity, 201);
   }
 
@@ -84,6 +85,7 @@ class ActivitiesController extends \BaseController {
     $input = ['description' => Input::get('description')];
 
     $activity->update($input);
+    $activity = Activity::where('uuid', '=', $activity->uuid)->with('ActivityType', 'User')->first();
     return Response::json($activity, 200);
   }
 
