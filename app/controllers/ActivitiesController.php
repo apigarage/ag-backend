@@ -67,6 +67,7 @@ class ActivitiesController extends \BaseController {
     unset($input['type']);
     $activity = Activity::create($input);
     $activity = Activity::where('uuid', '=', $activity->uuid)->with('ActivityType', 'User')->first();
+    $activity->NotifyMembersOfcomment();
     return Response::json($activity, 201);
   }
 
