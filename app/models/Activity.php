@@ -21,18 +21,17 @@ class Activity extends Eloquent {
     $params['user'] = User::find($this->user_id);
     $params['activity'] = $this;
     $project_users = UserProject::where('project_id' , '=', $params['item']->collection->project_id)->get();
-    $subject = $params['user']->first_name . ' ' . $params['user']->last_name;
-    if($params['activity_type']->name == 'comment')
-    {
-      $subject .= ' just added a comment to' ;
-    }
-    else if($params['activity_type']->name == 'flag')
-    {
-      $subject .= ' just flagged the';
-    }
-    else if($params['activity_type']->name == 'resolve')
-    {
-      $subject .= ' just resolved the';
+    $subject = $params['user']->name . ' ' ;
+    switch ($params['activity_type']->name) {
+      case ActivityType::COMMENT:
+        $subject .= ' just added a comment to' ;
+        break;
+      case ActivityType::FLAG:
+        $subject .= ' just flagged the';
+        break;
+      case ActivityType::RESOLVE:
+        $subject .= ' just resolved the';
+        break;
     }
 
     $subject .= ' endpoint: '. $params['item']->name;
