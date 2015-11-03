@@ -22,7 +22,14 @@ class RemoveEnvriometVars extends Migration {
    */
   public function down()
   {
-    //
+    Schema::create('environment_vars', function(Blueprint $table){
+      $table->timestamps();
+      $table->increments('id');
+      $table->string('name');
+      $table->string('value');
+      $table->integer('environment_id');
+      $table->softDeletes();
+    });
   }
 
 }
