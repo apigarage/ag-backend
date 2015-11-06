@@ -16,25 +16,30 @@ class Activity extends Eloquent {
 
   public function NotifyMembersOfcomment()
   {
+    // TODO - Queue notifications to support easier transfer.
     $params['item'] = Item::find($this->item_id);
     $params['activity_type'] = ActivityType::find($this->comment_type_id);
     $params['user'] = User::find($this->user_id);
     $params['activity'] = $this;
     $project_users = UserProject::where('project_id' , '=', $params['item']->collection->project_id)->get();
-    $subject = $params['user']->name . ' ' ;
+    $icon = '';
+    $action = '';
     switch ($params['activity_type']->name) {
       case ActivityType::COMMENT:
-        $subject .= ' just added a comment to' ;
+        $action = ' Comment On Endpoint - ' ;
         break;
       case ActivityType::FLAG:
-        $subject .= ' just flagged the';
+        $icon = '&#9873; ';
+        $action = ' Flagged Endpoint - ';
         break;
       case ActivityType::RESOLVE:
-        $subject .= ' just resolved the';
+        $icon = '&#9745;';
+        $action = ' Resolved Endpoint - ';
         break;
     }
 
-    $subject .= ' endpoint: '. $params['item']->name;
+
+    $subject = $icon . $params['user']->name . ' ' . $action + $params['item']->name;
 
     $params['title'] = $subject;
     $params['content'] = View::make('emails.activityAdded' , array( 'params' => $params));
