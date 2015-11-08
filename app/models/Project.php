@@ -109,31 +109,32 @@ class Project extends Model {
 
   public function notifyMemberOfSharedProject($to_email){
     $current_resource_owner = Authorizer::getResourceOwnerId();
-    $user = User::find($current_resource_owner)->toArray();
+    $user = User::find($current_resource_owner);
     $params['user'] = $user ;
-    $params['project'] = $this->toArray() ;
-    $params['title'] ='Shared A Project' ;
+    $params['project'] = $this;
+    $subject = "✉ " . $user->name . " Invites You To Collaborate On " . $this->name . " @ API Garage" . '12';
 
     $params['content'] = View::make('emails.shareSuccess' , array( 'params' => $params));
-    Mail::send('emails.master', ['params' => $params], function($message) use($to_email)
+    Mail::send('emails.master', ['params' => $params], function($message) use($to_email, $subject)
     {
-       $message->to($to_email)->subject('Project Shared With you');
+       $message->to($to_email)->subject($subject);
     });
   }
 
   public function sendSignUpEmailWithProjectInvitation($to_email){
     $current_resource_owner = Authorizer::getResourceOwnerId();
-    $user = User::find($current_resource_owner)->toArray();
+    $user = User::find($current_resource_owner);
 
     // Build the Subject Line
-    $params['title'] = "You are now part of the project -- " . $this->name;
-    $params['user'] = $user ;
-    $params['project'] = $this->toArray();
+    $subject = "✉ " . $user->name . " Invites You To Collaborate On " . $this->name . " @ API Garage";
+    $params['user'] = $user;
+    $params['project'] = $this;
 
 
     // Do not create an invitation, if it already exists.
     $shared_project = ProjectInvitation::where('email', '=', $to_email)
       ->where('project_id', '=', $this->id )->first();
+
     if(empty($shared_project))
     {
       $shared_project = new ProjectInvitation();
@@ -145,9 +146,9 @@ class Project extends Model {
 
     // Send the email regardless of it exists or not.
     $params['content'] = View::make('emails.ShareSignup' , array( 'params' => $params));
-    Mail::send('emails.master', ['params' => $params], function($message) use($to_email, $params)
+    Mail::send('emails.master', ['params' => $params], function($message) use($to_email, $subject)
     {
-      $message->to($to_email)->subject($params['title']);
+      $message->to($to_email)->subject($subject);
     });
   }
 

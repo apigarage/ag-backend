@@ -26,20 +26,20 @@ class Activity extends Eloquent {
     $action = '';
     switch ($params['activity_type']->name) {
       case ActivityType::COMMENT:
+        $icon = '💬 '; // be careful with this line. Please thorougly test.
         $action = ' Comment On Endpoint - ' ;
         break;
       case ActivityType::FLAG:
-        $icon = '&#9873; ';
+        $icon = '⚑ '; // be careful with this line. Please thorougly test.
         $action = ' Flagged Endpoint - ';
         break;
       case ActivityType::RESOLVE:
-        $icon = '&#9745;';
+        $icon = '✔ '; // be careful with this line. Please thorougly test.
         $action = ' Resolved Endpoint - ';
         break;
     }
 
-
-    $subject = $icon . $params['user']->name . ' ' . $action + $params['item']->name;
+    $subject = $icon . $params['user']->name . ' ' . $action . $params['item']->name;
 
     $params['title'] = $subject;
     $params['content'] = View::make('emails.activityAdded' , array( 'params' => $params));
