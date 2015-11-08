@@ -32,10 +32,11 @@ class PasswordResetController extends Controller {
       'used' => false
     ]);
 
+    $params = ['content' => View::make('emails.passwordReset' , array( 'token' => $token))];
     // Send email to the user
-    Mail::send('emails.passwordReset', ['token' => $token], function($message) use($email, $token)
+    Mail::send('emails.master', ['params' => $params], function($message) use($email, $token)
     {
-       $message->to($email)->subject('Password Code - ' . $token);
+       $message->to($email)->subject('API Garage Password Reset Request');
     });
 
     // Return 200-OK
