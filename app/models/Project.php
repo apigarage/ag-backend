@@ -112,7 +112,7 @@ class Project extends Model {
     $user = User::find($current_resource_owner);
     $params['user'] = $user ;
     $params['project'] = $this;
-    $subject = "✉ " . $user->name . " Invites You To Collaborate On " . $this->name . " @ API Garage" . '12';
+    $subject = "✉ " . $user->name . " Invites You To Collaborate On " . $this->name . " @ API Garage"; 
 
     $params['content'] = View::make('emails.shareSuccess' , array( 'params' => $params));
     Mail::send('emails.master', ['params' => $params], function($message) use($to_email, $subject)
