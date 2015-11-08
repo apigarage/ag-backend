@@ -49,6 +49,15 @@ class UsersController extends \BaseController {
 
 
   /**
+   * Display current user
+   */
+  public function me()
+  {
+    $user = User::find(Authorizer::getResourceOwnerId());
+    return Response::json($user, 200);
+  }
+
+  /**
    * Display the specified resource.
    *
    * @param  int  $id

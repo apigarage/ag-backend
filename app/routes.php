@@ -33,6 +33,7 @@ Route::group(array('prefix' => 'api','before' => 'oauth'), function()
     return Response::json( array('success' => 'Yey, you have access to the secure part of the API now') );
   });
 
+  Route::get('me', 'UsersController@me');
   Route::resource('users', 'UsersController', ['only'=>['show','update']]);
   Route::resource('projects', 'ProjectsController');
   Route::resource('projects.users', 'ProjectUsersController');
@@ -41,7 +42,9 @@ Route::group(array('prefix' => 'api','before' => 'oauth'), function()
   Route::resource('projects.keys.environments', 'PorjectKeyEnvironmentController');
   Route::resource('projects.keys', 'PorjectKeyController');
   Route::resource('items', 'ItemsController');
+  Route::resource('items.activities', 'ActivitiesController');
   Route::resource('postman', 'PostmanController', ['only' =>['store']]);
+  Route::get('projects/{id}/clone',  array('uses' => 'ProjectsController@copy'));
 });
 
 /**
