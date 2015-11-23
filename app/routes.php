@@ -44,6 +44,7 @@ Route::group(array('prefix' => 'api','before' => 'oauth'), function()
   Route::resource('projects.keys', 'PorjectKeyController');
   Route::resource('items', 'ItemsController');
   Route::resource('items.activities', 'ActivitiesController');
+  Route::resource('items.responses', 'ResponsesController');
   Route::resource('postman', 'PostmanController', ['only' =>['store']]);
   Route::get('projects/{id}/clone',  array('uses' => 'ProjectsController@copy'));
 });

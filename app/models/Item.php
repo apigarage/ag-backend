@@ -11,19 +11,8 @@ class Item extends Eloquent {
     return json_decode($value);
   }
 
-  // public function getDataAttribute($value)
-  // {
-  //   return json_decode( $value )
-  // }
-
-  // public function setDataAttribute($value)
-  // {
-  //   return json_encode( $value )
-  // }
-
-  public function setHeaderAttribute($value)
-  {
-    return json_encode($value);
+  public function responses(){
+    return $this->hasMany('AGResponse');
   }
 
   public function activities(){
