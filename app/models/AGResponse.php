@@ -17,7 +17,7 @@ class AGResponse extends Eloquent {
               ->join('collections', 'items.collection_id', '=', 'collections.id')
               ->join('projects', 'collections.project_id', '=', 'projects.id')
               ->where('projects.id', '=', $project_id)
-              ->get(array('responses.*'));
+              ->get(array('responses.*', 'items.uuid as item.uuid'));
 
     return $responses;
   }
