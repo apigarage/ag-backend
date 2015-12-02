@@ -11,6 +11,7 @@ Route::get('/', function() {
 
 Route::resource('emails', 'EmailsController', ['only' =>['index']]);
 
+
 /**
  * Publicly Avaialable Routes.
  * TODO - Please lock this with client-id and secret.
@@ -40,6 +41,7 @@ Route::group(array('prefix' => 'api','before' => 'oauth'), function()
   Route::resource('collections', 'CollectionsController');
   Route::resource('projects.environments', 'EnvironmentsController');
   Route::resource('projects.keys.environments', 'PorjectKeyEnvironmentController');
+  Route::resource('projects.responses', 'ProjectResponsesController');
   Route::resource('environments.vars', 'EnvironmentVarsController');
   Route::resource('projects.keys', 'PorjectKeyController');
   Route::resource('items', 'ItemsController');
