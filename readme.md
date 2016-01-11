@@ -1,5 +1,9 @@
 ## Install LAMP/MAMP/WAMP Stack
 
+Windows Setup:
+download laragon
+https://laragon.org/
+
 ## Setup Database
 
 ## Add the local config file named .env.local.php
