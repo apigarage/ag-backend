@@ -13,7 +13,7 @@ class AddSequenceToProjectTable extends Migration {
   public function up()
   {
     Schema::table('projects',function($table){
-      $table->text('sequence');
+      $table->text('sequence')->nullable();
     });
   }
 

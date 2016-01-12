@@ -38,7 +38,7 @@ class addSequenceForRequests extends Command {
   public function fire()
   {
     // TODO
-    $collections = Collection::whereSequence('')->orWhereNull('sequence')->get();
+    $collections = Collection::whereSequence('NULL')->get();
     foreach ($collections as $collection) {
       $sequence = array();
       $requests = Item::where('collection_id','=',$collection->id)->get();

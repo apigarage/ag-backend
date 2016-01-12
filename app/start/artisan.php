@@ -14,3 +14,4 @@
 Artisan::add(new addSequenceForRequests);
 Artisan::add(new MigrateEnviromentVars);
 Artisan::add(new MoveLonelyItemsIntoCollections);
+Artisan::add(new AddSequenceCommand);
