@@ -11,4 +11,13 @@ class Collection extends Model {
     return $this->hasMany('Item');
   }
 
+	public function setSequenceAttribute($value)
+  {
+    $this->attributes['sequence'] = json_encode($value);
+  }
+
+  public function getSequenceAttribute($value)
+  {
+    return json_decode($value);
+  }
 }
