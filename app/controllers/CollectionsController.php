@@ -50,14 +50,14 @@ class CollectionsController extends \BaseController {
     $input = Input::all();
     $collection = Collection::create($input);
 
-    $project = Project::where('id', $input['project_id'])
-    $projectSequence = $project['sequence'];
-    $sequenceArray = json_decode($projectSequence);
-    array_push($sequenceArray, $input['id']);
-    $sequence_encoded = json_encode($sequenceArray);
+    // $project = Project::where('id', $input['project_id'])
+    // $projectSequence = $project['sequence'];
+    // $sequenceArray = json_decode($projectSequence);
+    // array_push($sequenceArray, $input['id']);
+    // $sequence_encoded = json_encode($sequenceArray);
     
-    Project::where('id', $)
-      ->update(['sequence' => $sequence_encoded]);
+    // Project::where('id', $project['id'])
+    //   ->update(['sequence' => $sequence_encoded]);
     return Response::json( $collection, 201 );
   }
 

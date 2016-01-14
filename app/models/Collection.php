@@ -20,4 +20,40 @@ class Collection extends Model {
   {
     return json_decode($value);
   }
+
+
+  // public static function create(array $input)
+  // {
+  //   return parent::create($input);
+  // }
+  public static function create(array $input)
+  {
+    DB::beginTransaction();
+    try
+    {
+      $collection = parent::create($input);
+      $project = Project::find($collection->project_id);
+      $projectSequence = $project->sequence;
+
+      if(empty($projectSequence))
+      {
+        $projectSequence = '[]';
+      };
+
+      $sequenceArray = json_decode($projectSequence);
+      array_push($sequenceArray, $collection->id);
+      $sequenceEncoded = json_encode($sequenceArray);
+
+      $project->sequence = $sequenceEncoded;
+      $project->save(); 
+      DB::commit();
+      return $collection;
+    }
+    catch (exception $e)
+    {
+      //if pushing to project sequence fails roll back and return 500
+      DB::rollback();
+      throw $e;
+    }
+  }
 }
