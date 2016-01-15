@@ -21,7 +21,7 @@ class ItemsController extends \BaseController {
       }
     }
     $item = Item::create($input);
-    $collection = Collection::where('id', $input['controller_id'])
+    // $collection = Collection::where('id', $input['controller_id']);
     return Response::json($item, 201);
   }
 
