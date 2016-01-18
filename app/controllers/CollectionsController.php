@@ -50,14 +50,6 @@ class CollectionsController extends \BaseController {
     $input = Input::all();
     $collection = Collection::create($input);
 
-    // $project = Project::where('id', $input['project_id'])
-    // $projectSequence = $project['sequence'];
-    // $sequenceArray = json_decode($projectSequence);
-    // array_push($sequenceArray, $input['id']);
-    // $sequence_encoded = json_encode($sequenceArray);
-    
-    // Project::where('id', $project['id'])
-    //   ->update(['sequence' => $sequence_encoded]);
     return Response::json( $collection, 201 );
   }
 
@@ -108,6 +100,7 @@ class CollectionsController extends \BaseController {
     if( ! $this->has_access($id, 'delete')) return Response::json([], 401);
     $collection = Collection::find($id);
     if($collection){
+      $collection -> removeFromSequence($collection);
       $collection->items()->delete();
       $collection->delete();
     }

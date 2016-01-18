@@ -56,4 +56,35 @@ class Collection extends Model {
       throw $e;
     }
   }
+
+  public function removeFromSequence($collection)
+  {
+    DB::beginTransaction();
+    try
+    {
+      $collection_id = $collection->id;
+      $project = Project::find($collection->project_id);
+      $projectSequence = $project->sequence;
+
+      $sequenceArray = json_decode($projectSequence);
+
+      $key = array_search($collection_id, $sequenceArray);
+
+      unset($sequenceArray[$key]);
+
+      $new_sequence = array_values($sequenceArray);
+
+      $sequenceEncoded = json_encode($new_sequence);
+
+      $project->sequence = $sequenceEncoded;
+      $project->save();
+      DB::commit();
+      return $collection;
+    }
+    catch (exception $e)
+    {
+      DB::rollback();
+      throw $e;
+    }
+  }
 }

@@ -72,6 +72,7 @@ class ItemsController extends \BaseController {
     $item = Item::where('uuid', $uuid)->first();
     if( empty($item) ) return Response::json([], 404);
 
+    $item->removeFromSequence($item);
     $item->delete();
     return Response::json([], 204);
   }

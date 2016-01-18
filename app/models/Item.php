@@ -64,4 +64,35 @@ class Item extends Eloquent {
       throw $e;
     }
   }
+
+  public function removeFromSequence($item)
+  {
+    DB::beginTransaction();
+    try
+    {
+      $item_id = $item->id;
+      $collection = Collection::find($item->collection_id);
+      $collectionSequence = $collection->sequence;
+
+      $sequenceArray = json_decode($collectionSequence);
+
+      $key = array_search($item_id, $sequenceArray);
+
+      unset($sequenceArray[$key]);
+
+      $new_sequence = array_values($sequenceArray);
+
+      $sequenceEncoded = json_encode($new_sequence);
+
+      $collection->sequence = $sequenceEncoded;
+      $collection->save();
+      DB::commit();
+      return $item;
+    }
+    catch (exception $e)
+    {
+      DB::rollback();
+      throw $e;
+    }
+  }
 }
