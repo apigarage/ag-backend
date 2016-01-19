@@ -65,29 +65,26 @@ class Item extends Eloquent {
     }
   }
 
-  public function removeFromSequence($item)
+  public function delete()
   {
     DB::beginTransaction();
     try
     {
-      $item_id = $item->id;
-      $collection = Collection::find($item->collection_id);
+      $item_id = $this->id;
+      $collection = Collection::find($this->collection_id);
       $collectionSequence = $collection->sequence;
 
       $sequenceArray = json_decode($collectionSequence);
-
-      $key = array_search($item_id, $sequenceArray);
-
-      unset($sequenceArray[$key]);
-
-      $new_sequence = array_values($sequenceArray);
-
-      $sequenceEncoded = json_encode($new_sequence);
-
-      $collection->sequence = $sequenceEncoded;
+      
+      $index = array_search($item_id, $sequenceArray);
+      
+      array_splice($sequenceArray, $index, 1);
+    
+      $collection->sequence = json_encode($sequenceArray);
       $collection->save();
+      parent::delete($this);
       DB::commit();
-      return $item;
+      return $this;
     }
     catch (exception $e)
     {

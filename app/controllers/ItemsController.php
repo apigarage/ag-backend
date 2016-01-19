@@ -21,7 +21,6 @@ class ItemsController extends \BaseController {
       }
     }
     $item = Item::create($input);
-    // $collection = Collection::where('id', $input['controller_id']);
     return Response::json($item, 201);
   }
 
@@ -72,7 +71,6 @@ class ItemsController extends \BaseController {
     $item = Item::where('uuid', $uuid)->first();
     if( empty($item) ) return Response::json([], 404);
 
-    $item->removeFromSequence($item);
     $item->delete();
     return Response::json([], 204);
   }

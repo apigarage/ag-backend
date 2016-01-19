@@ -11,7 +11,7 @@ class Collection extends Model {
     return $this->hasMany('Item');
   }
 
-	public function setSequenceAttribute($value)
+  public function setSequenceAttribute($value)
   {
     $this->attributes['sequence'] = json_encode($value);
   }
@@ -22,10 +22,6 @@ class Collection extends Model {
   }
 
 
-  // public static function create(array $input)
-  // {
-  //   return parent::create($input);
-  // }
   public static function create(array $input)
   {
     DB::beginTransaction();
@@ -57,29 +53,28 @@ class Collection extends Model {
     }
   }
 
-  public function removeFromSequence($collection)
+  public function delete()
   {
     DB::beginTransaction();
     try
     {
-      $collection_id = $collection->id;
-      $project = Project::find($collection->project_id);
+      $collection_id = $this->id;
+      $project = Project::find($this->project_id);
       $projectSequence = $project->sequence;
 
       $sequenceArray = json_decode($projectSequence);
 
-      $key = array_search($collection_id, $sequenceArray);
+      $index = array_search($collection_id, $sequenceArray);
 
-      unset($sequenceArray[$key]);
+      array_splice($sequenceArray, $index, 1);
 
-      $new_sequence = array_values($sequenceArray);
+      
 
-      $sequenceEncoded = json_encode($new_sequence);
-
-      $project->sequence = $sequenceEncoded;
+      $project->sequence = json_encode($sequenceArray);
       $project->save();
+      parent::delete($this);
       DB::commit();
-      return $collection;
+      return $this;
     }
     catch (exception $e)
     {

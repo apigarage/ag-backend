@@ -99,8 +99,8 @@ class CollectionsController extends \BaseController {
   {
     if( ! $this->has_access($id, 'delete')) return Response::json([], 401);
     $collection = Collection::find($id);
-    if($collection){
-      $collection -> removeFromSequence($collection);
+    if($collection)
+    {
       $collection->items()->delete();
       $collection->delete();
     }
