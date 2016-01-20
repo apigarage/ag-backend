@@ -109,7 +109,6 @@ class Project extends Model {
     // split into two delete for public and private
     $this->publicEnvironments()->delete();
     $this->privateEnvironments()->delete();
-    $this->items()->delete();
     $collections = Collection::where('project_id', $this->id)->get();
 
     foreach($collections as $collection){
