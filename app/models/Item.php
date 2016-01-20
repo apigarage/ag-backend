@@ -65,6 +65,17 @@ class Item extends Eloquent {
     }
   }
 
+  // public function drag_and_drop($data)
+  // {
+  //   DB::beginTransaction();
+  //   try
+  //   {
+  //     $collection_old = ;
+  //     $original_sequence 
+
+  //   }
+  // }
+
   public function delete()
   {
     DB::beginTransaction();
