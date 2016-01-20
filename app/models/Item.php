@@ -39,7 +39,7 @@ class Item extends Eloquent {
       };
 
       $sequenceArray = json_decode($collectionSequence);
-      array_push($sequenceArray, $item->id);
+      array_push($sequenceArray, $item->uuid);
       $sequenceEncoded = json_encode($sequenceArray);
 
       $collection->sequence = $sequenceEncoded;
@@ -60,13 +60,13 @@ class Item extends Eloquent {
     DB::beginTransaction();
     try
     {
-      $item_id = $this->id;
+      $item_uuid = $this->uuid;
       $collection = Collection::find($this->collection_id);
       $collectionSequence = $collection->sequence;
 
       $sequenceArray = json_decode($collectionSequence);
       
-      $index = array_search($item_id, $sequenceArray);
+      $index = array_search($item_uuid, $sequenceArray);
       
       array_splice($sequenceArray, $index, 1);
     
