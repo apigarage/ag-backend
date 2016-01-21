@@ -55,16 +55,12 @@ class Item extends Eloquent {
     }
   }
 
-  public function change_collection(array $data)
+  public function change_collection()
   {
     DB::beginTransaction();
     try
-    {
-      $item = Item::find($_GET['endpoint-uuid']);
-      $item->collection_id = $data[collection_id];
-      $item->save();
-
-      $old_collection = Collection::find($item->collection_id);
+    {      
+      $old_collection = Collection::find($this->collection_id);
       $old_collection->sequence = json_encode($data[source_sequence]);
       $old_collection->save();
 
@@ -78,6 +74,27 @@ class Item extends Eloquent {
     {
       DB:rollback();
       throw $e;
+    }
+  }
+
+  public function update(array $data)
+  {
+    DB::beginTransaction();
+    try
+    {
+      //If data['collection_id']
+      if (!empty($data['collection_id'])) {
+        if ($data['collection_id' != $this->collection_id]) {
+          $this->change_collection($data);
+        }
+      }
+      parent::update($data);
+      DB::commit();
+    }
+    catch (exception $e)
+    {
+      DB::rollback();
+      throw ($e);
     }
   }
 
