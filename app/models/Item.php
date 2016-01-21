@@ -55,7 +55,7 @@ class Item extends Eloquent {
     }
   }
 
-  public function drag_and_drop($data)
+  public static function update(array $data)
   {
     DB::beginTransaction();
     try
