@@ -55,7 +55,7 @@ class Item extends Eloquent {
     }
   }
 
-  public static function update(array $data)
+  public function change_collection(array $data)
   {
     DB::beginTransaction();
     try
