@@ -87,12 +87,11 @@ class Item extends Eloquent {
     }
   }
 
-  public function update(array $data)
+  public static function update(array $data)
   {
     DB::beginTransaction();
     try
     {
-      //If data['collection_id']
       if (!empty($data['collection_id'])) {
         if ($data['collection_id' != $this->collection_id]) {
           $this->change_collection($data);
