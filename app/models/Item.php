@@ -65,16 +65,31 @@ class Item extends Eloquent {
     }
   }
 
-  // public function drag_and_drop($data)
-  // {
-  //   DB::beginTransaction();
-  //   try
-  //   {
-  //     $collection_old = ;
-  //     $original_sequence 
+  public function drag_and_drop($data)
+  {
+    DB::beginTransaction();
+    try
+    {
+      $item = Item::find($_GET['endpoint-uuid']);
+      $item->collection_id = $data[collection_id];
+      $item->save();
 
-  //   }
-  // }
+      $old_collection = Collection::find($item->collection_id);
+      $old_collection->sequence = json_encode($data[source_sequence]);
+      $old_collection->save();
+
+      $new_collection = Collection::find($data[collection_id]->collection_id);
+      $new_collection_sequence = json_encode($data[destination_sequence]);
+      $new_collection->save();
+
+      DB::commit();
+    }
+    catch (exception $e)
+    {
+      DB:rollback();
+      throw $e;
+    }
+  }
 
   public function delete()
   {
