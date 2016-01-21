@@ -53,7 +53,7 @@ class ItemsController extends \BaseController {
     $input = Input::all();
     $headers = Input::get('headers');
     if( isset( $headers ) ){
-      $item->change_collection($data);
+      $item->update();
       $input['headers'] = json_encode( Input::get('headers') );
     }
     $item->update($input);
