@@ -58,7 +58,6 @@ class Collection extends Model {
       $project = Project::find($this->project_id);
       $projectSequence = $project->sequence;
 
-      // dd($projectSequence);
       $sequenceArray = ($projectSequence);
       $index = array_search($collection_id, $sequenceArray);
       array_splice($sequenceArray, $index, 1);
@@ -66,7 +65,7 @@ class Collection extends Model {
       $project->sequence = $sequenceArray;
       $project->save();
 
-      parent::delete($collection_id);
+      parent::delete();
       DB::commit();
     }
     catch (exception $e)

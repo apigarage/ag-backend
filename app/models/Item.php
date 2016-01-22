@@ -34,7 +34,6 @@ class Item extends Eloquent {
       $collectionSequence = $collection->sequence;
 
       if(empty($collectionSequence)) $collctionSequence = '[]';
-
       array_push($collectionSequence, $item->uuid);
 
       $collection->sequence = $collectionSequence;
