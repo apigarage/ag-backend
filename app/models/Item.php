@@ -50,10 +50,9 @@ class Item extends Eloquent {
 
       $sequenceArray = json_decode($collectionSequence);
       array_push($sequenceArray, $item->uuid);
-      $sequenceEncoded = json_encode($sequenceArray);
 
-      $collection->sequence = $sequenceEncoded;
-      $collection->save(); 
+      $collection->sequence = $sequenceArray;
+      $collection->save();
       DB::commit();
       return $item;
     }
@@ -66,13 +65,13 @@ class Item extends Eloquent {
   }
 
   public function change_collection($data)
-  {   
+  {
     $old_collection = Collection::find($this->collection_id);
-    $old_collection->sequence = json_encode($data['source_sequence']);
+    $old_collection->sequence = $data['source_sequence'];
     $old_collection->save();
 
     $new_collection = Collection::find($data['collection_id']);
-    $new_collection->sequence = json_encode($data['destination_sequence']);
+    $new_collection->sequence = $data['destination_sequence'];
     $new_collection->save();
   }
 
@@ -106,16 +105,14 @@ class Item extends Eloquent {
       $collectionSequence = $collection->sequence;
 
       $sequenceArray = json_decode($collectionSequence);
-      
       $index = array_search($item_uuid, $sequenceArray);
-      
       array_splice($sequenceArray, $index, 1);
-    
-      $collection->sequence = json_encode($sequenceArray);
+
+      $collection->sequence = $sequenceArray;
       $collection->save();
+
       parent::delete($this);
       DB::commit();
-      return $this;
     }
     catch (exception $e)
     {
