@@ -43,15 +43,11 @@ class Item extends Eloquent {
       $collection = Collection::find($item->collection_id);
       $collectionSequence = $collection->sequence;
 
-      if(empty($collectionSequence))
-      {
-        $collectionSequence = '[]';
-      };
+      if(empty($collectionSequence)) $collctionSequence = '[]';
 
-      $sequenceArray = json_decode($collectionSequence);
-      array_push($sequenceArray, $item->uuid);
+      array_push($collectionSequence, $item->uuid);
 
-      $collection->sequence = $sequenceArray;
+      $collection->sequence = $collectionSequence;
       $collection->save();
       DB::commit();
       return $item;
@@ -104,11 +100,10 @@ class Item extends Eloquent {
       $collection = Collection::find($this->collection_id);
       $collectionSequence = $collection->sequence;
 
-      $sequenceArray = json_decode($collectionSequence);
-      $index = array_search($item_uuid, $sequenceArray);
-      array_splice($sequenceArray, $index, 1);
+      $index = array_search($item_uuid, $collectionSequence);
+      array_splice($collectionSequence, $index, 1);
 
-      $collection->sequence = $sequenceArray;
+      $collection->sequence = $collectionSequence;
       $collection->save();
 
       parent::delete($this);
