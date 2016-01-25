@@ -46,20 +46,20 @@ class AddSequenceCommand extends Command {
       {
         $sequence = array();
         $requests = Item::where('collection_id','=',$collection->id)->get();
-        foreach ($requests as $request) 
+        foreach ($requests as $request)
         {
           array_push($sequence, array('uuid'=> $request->uuid));
         }
         if(!empty($sequence))
         {
-          $collection->sequence = json_encode($sequence);
+          $collection->sequence = ($sequence);
           $collection->save();
         }
       }
 
       // Sequencing Projects
       $projects = Project::whereSequence('NULL')->get();
-      foreach ($projects as $project) 
+      foreach ($projects as $project)
       {
         $sequence = array();
         $requests = Collection::where('project_id','=',$project->id)->get();
@@ -67,14 +67,14 @@ class AddSequenceCommand extends Command {
           array_push($sequence, array('collection_id'=> $collection->id));
         }
         if(!empty($sequence)){
-          $collection->sequence = json_encode($sequence);
+          $collection->sequence = ($sequence);
           $collection->save();
         }
-      } 
+      }
     }
     catch (exception $e)
     {
-    // if sequencing failed roll back and return 500 
+    // if sequencing failed roll back and return 500
       DB::rollback();
       echo json_encode($e->getTrace());
     }
