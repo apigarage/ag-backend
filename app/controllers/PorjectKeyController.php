@@ -129,7 +129,7 @@ class PorjectKeyController extends \BaseController {
       } catch (Exception $e){
         // if creation failed roll back and return 500
         DB::rollback();
-        return Response::json(["meesage" => $e->getMessage() ], 500 );
+        return Response::json(["message" => $e->getMessage() ], 500 );
       }
       DB::commit();
 
