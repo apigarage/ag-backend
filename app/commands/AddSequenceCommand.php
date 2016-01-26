@@ -41,18 +41,18 @@ class AddSequenceCommand extends Command {
     try
     {
       // Sequencing Collection
-      $collections = Collection::whereSequence('NULL')->get();
+      $collections = Collection::whereSequence('')->get();
       foreach ($collections as $collection)
       {
         $sequence = array();
         $requests = Item::where('collection_id','=',$collection->id)->get();
         foreach ($requests as $request)
         {
-          array_push($sequence, array('uuid'=> $request->uuid));
+          array_push($sequence, array($request->uuid));
         }
         if(!empty($sequence))
         {
-          $collection->sequence = ($sequence);
+          $collection->sequence = $sequence;
           $collection->save();
         }
       }
@@ -67,7 +67,7 @@ class AddSequenceCommand extends Command {
           array_push($sequence, array('collection_id'=> $collection->id));
         }
         if(!empty($sequence)){
-          $collection->sequence = ($sequence);
+          $collection->sequence = $sequence;
           $collection->save();
         }
       }
