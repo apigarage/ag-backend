@@ -43,7 +43,7 @@ class Item extends Eloquent {
       $collection = Collection::find($item->collection_id);
       $collectionSequence = $collection->sequence;
 
-      if(empty($collectionSequence)) $collctionSequence = '[]';
+      if(empty($collectionSequence)) $collectionSequence = array();
 
       array_push($collectionSequence, $item->uuid);
 

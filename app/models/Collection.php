@@ -31,7 +31,7 @@ class Collection extends Model {
       $project = Project::find($collection->project_id);
 
       $projectSequence = $project->sequence;
-      if(empty($projectSequence)) $projectSequence = '[]';
+      if(empty($projectSequence)) $projectSequence = array();
 
       array_push($projectSequence, $collection->id);
 
