@@ -41,7 +41,9 @@ class AddSequenceCommand extends Command {
     try
     {
       // Sequencing Collection
-      $collections = Collection::whereSequence('')->get();
+      $collections = Collection::where('sequence','=', NULL)
+                                ->orWhere('sequence','=', '')
+                                ->get();
       foreach ($collections as $collection)
       {
         $sequence = array();
@@ -50,15 +52,14 @@ class AddSequenceCommand extends Command {
         {
           array_push($sequence, array($item->uuid));
         }
-        if(!empty($sequence))
-        {
-          $collection->sequence = $sequence;
-          $collection->save();
-        }
+        $collection->sequence = $sequence;
+        $collection->save();
       }
 
       // Sequencing Projects
-      $projects = Project::whereSequence('NULL')->get();
+      $projects = Project::where('sequence','=', NULL)
+                          ->orWhere('sequence','=', '')
+                          ->get();
       foreach ($projects as $project)
       {
         $sequence = array();
@@ -66,17 +67,15 @@ class AddSequenceCommand extends Command {
         foreach ($collections as $collection) {
           array_push($sequence, array($collection->id));
         }
-        if(!empty($sequence)){
-          $collection->sequence = $sequence;
-          $collection->save();
-        }
+        $project->sequence = $sequence;
+        $project->save();
       }
     }
     catch (exception $e)
     {
     // if sequencing failed roll back and return 500
       DB::rollback();
-      echo json_encode($e->getTrace());
+      throw $e;
     }
     DB::commit();
   }
