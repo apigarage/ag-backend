@@ -76,6 +76,7 @@ class AddSequenceCommand extends Command {
           $collection->sequence = $sequence;
           $collection->save();
         }
+
         $project->sequence = $sequence;
         $project->save();
       }

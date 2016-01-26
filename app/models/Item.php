@@ -3,7 +3,8 @@
 
 class Item extends Eloquent {
 
-  protected $fillable = ['author_id','uuid','collection_id','project_id','name','description','url','method','headers','data','flagged'];
+  protected $fillable = ['author_id','uuid','collection_id','project_id','name'
+    ,'description','url','method','headers','data','flagged', 'mocked'];
   protected $table = 'items';
 
   public function getHeadersAttribute($value)
@@ -11,19 +12,8 @@ class Item extends Eloquent {
     return json_decode($value);
   }
 
-  // public function getDataAttribute($value)
-  // {
-  //   return json_decode( $value )
-  // }
-
-  // public function setDataAttribute($value)
-  // {
-  //   return json_encode( $value )
-  // }
-
-  public function setHeaderAttribute($value)
-  {
-    return json_encode($value);
+  public function responses(){
+    return $this->hasMany('AGResponse');
   }
 
   public function activities(){
@@ -44,7 +34,6 @@ class Item extends Eloquent {
       $collectionSequence = $collection->sequence;
 
       if(empty($collectionSequence)) $collectionSequence = array();
-
       array_push($collectionSequence, $item->uuid);
 
       $collection->sequence = $collectionSequence;
