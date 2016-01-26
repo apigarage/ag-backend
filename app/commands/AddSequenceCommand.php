@@ -50,7 +50,7 @@ class AddSequenceCommand extends Command {
         $items = Item::where('collection_id','=',$collection->id)->get();
         foreach ($items as $item)
         {
-          array_push($sequence, ($item->uuid));
+          array_push($sequence, $item->uuid);
         }
         if(!empty($sequence))
         {
@@ -70,7 +70,7 @@ class AddSequenceCommand extends Command {
         $sequence = array();
         $collections = Collection::where('project_id','=',$project->id)->get();
         foreach ($collections as $collection) {
-          array_push($sequence, ($collection->id));
+          array_push($sequence, $collection->id);
         }
         if(!empty($sequence)){
           $collection->sequence = $sequence;
