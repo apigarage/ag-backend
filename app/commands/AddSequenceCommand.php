@@ -41,42 +41,51 @@ class AddSequenceCommand extends Command {
     try
     {
       // Sequencing Collection
-      $collections = Collection::whereSequence('NULL')->get();
+      $collections = Collection::where('sequence','=', NULL)
+                                ->orWhere('sequence','=', '')
+                                ->get();
       foreach ($collections as $collection)
       {
         $sequence = array();
-        $requests = Item::where('collection_id','=',$collection->id)->get();
-        foreach ($requests as $request) 
+        $items = Item::where('collection_id','=',$collection->id)->get();
+        foreach ($items as $item)
         {
-          array_push($sequence, array('uuid'=> $request->uuid));
+          array_push($sequence, $item->uuid);
         }
         if(!empty($sequence))
         {
-          $collection->sequence = json_encode($sequence);
+          $collection->sequence = $sequence;
           $collection->save();
         }
+        $collection->sequence = $sequence;
+        $collection->save();
       }
 
       // Sequencing Projects
-      $projects = Project::whereSequence('NULL')->get();
-      foreach ($projects as $project) 
+      $projects = Project::where('sequence','=', NULL)
+                          ->orWhere('sequence','=', '')
+                          ->get();
+      foreach ($projects as $project)
       {
         $sequence = array();
-        $requests = Collection::where('project_id','=',$project->id)->get();
+        $collections = Collection::where('project_id','=',$project->id)->get();
         foreach ($collections as $collection) {
-          array_push($sequence, array('collection_id'=> $collection->id));
+          array_push($sequence, $collection->id);
         }
         if(!empty($sequence)){
-          $collection->sequence = json_encode($sequence);
+          $collection->sequence = $sequence;
           $collection->save();
         }
-      } 
+
+        $project->sequence = $sequence;
+        $project->save();
+      }
     }
     catch (exception $e)
     {
-    // if sequencing failed roll back and return 500 
+    // if sequencing failed roll back and return 500
       DB::rollback();
-      echo json_encode($e->getTrace());
+      throw $e;
     }
     DB::commit();
   }

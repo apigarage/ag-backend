@@ -29,19 +29,15 @@ class Collection extends Model {
     {
       $collection = parent::create($input);
       $project = Project::find($collection->project_id);
+
       $projectSequence = $project->sequence;
+      if(empty($projectSequence)) $projectSequence = array();
 
-      if(empty($projectSequence))
-      {
-        $projectSequence = '[]';
-      };
+      array_push($projectSequence, $collection->id);
 
-      $sequenceArray = json_decode($projectSequence);
-      array_push($sequenceArray, $collection->id);
-      $sequenceEncoded = json_encode($sequenceArray);
+      $project->sequence = $projectSequence;
+      $project->save();
 
-      $project->sequence = $sequenceEncoded;
-      $project->save(); 
       DB::commit();
       return $collection;
     }
@@ -62,19 +58,15 @@ class Collection extends Model {
       $project = Project::find($this->project_id);
       $projectSequence = $project->sequence;
 
-      $sequenceArray = json_decode($projectSequence);
-
+      $sequenceArray = ($projectSequence);
       $index = array_search($collection_id, $sequenceArray);
-
       array_splice($sequenceArray, $index, 1);
 
-      
-
-      $project->sequence = json_encode($sequenceArray);
+      $project->sequence = $sequenceArray;
       $project->save();
-      parent::delete($this);
+
+      parent::delete();
       DB::commit();
-      return $this;
     }
     catch (exception $e)
     {
