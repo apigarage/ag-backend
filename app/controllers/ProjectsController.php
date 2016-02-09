@@ -126,7 +126,6 @@ class ProjectsController extends \BaseController {
   public function destroy($id)
   {
     if( ! $this->has_access($id, 'delete') ) return Response::json([], 401);
-
     DB::beginTransaction();
     try{
       UserProject::where('project_id', '=', $id)->delete();
@@ -134,7 +133,6 @@ class ProjectsController extends \BaseController {
       $project->deleteChildren();
       $project->delete();
     } catch (Exception $e){
-      // if creation failed roll back and return 500
       DB::rollback();
       return Response::json(["meesage" => $e->getMessage() ], 500 );
     }

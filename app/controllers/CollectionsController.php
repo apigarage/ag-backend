@@ -49,6 +49,7 @@ class CollectionsController extends \BaseController {
   {
     $input = Input::all();
     $collection = Collection::create($input);
+
     return Response::json( $collection, 201 );
   }
 
@@ -98,7 +99,8 @@ class CollectionsController extends \BaseController {
   {
     if( ! $this->has_access($id, 'delete')) return Response::json([], 401);
     $collection = Collection::find($id);
-    if($collection){
+    if($collection)
+    {
       $collection->items()->delete();
       $collection->delete();
     }
