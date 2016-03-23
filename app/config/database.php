@@ -46,7 +46,7 @@ return array(
 
   'connections' => array(
 
-      
+
     'mysql' => array(
       'driver'  => 'mysql',
       'host'    => $_ENV['db_host'],

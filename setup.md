@@ -87,6 +87,10 @@ return array(
   'db_name' => '_______',
   'db_username' => '_______',
   'db_password' => '_______',
+
+  /* mailgun */
+  'mailgun_domain' => 'andbox196ff6aea54948fc9be5564c7d67c22d.mailgun.org',
+  'mailgun_secret' => 'key-b2ff544ae437400a5343d1e83c73d41a',
 );
 ```
 
